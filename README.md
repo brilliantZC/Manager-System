@@ -1,6 +1,6 @@
 **项目说明** 
 使用人人快速开发框架进行系统开发，自学使用<br>
-前端地址：（未发布）<br>
+前端地址：https://github.com/brilliantZC/Manager-system-front<br>
 
 
 原框架Git仓库：https://gitee.com/renrenio/renren-fast
