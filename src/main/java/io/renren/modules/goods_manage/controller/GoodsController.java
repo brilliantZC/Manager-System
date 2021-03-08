@@ -3,6 +3,9 @@ package io.renren.modules.goods_manage.controller;
 import java.util.Arrays;
 import java.util.Map;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import io.renren.modules.goods_category.entity.GoodsCateEntity;
+import io.renren.modules.goods_category.service.GoodsCateService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,6 +33,8 @@ import io.renren.common.utils.R;
 public class GoodsController {
     @Autowired
     private GoodsService goodsService;
+    @Autowired
+    private GoodsCateService goodsCateService;
 
     /**
      * 列表
@@ -61,6 +66,19 @@ public class GoodsController {
     @RequiresPermissions("goods_manage:goods:save")
     public R save(@RequestBody GoodsEntity goods){
 		goodsService.save(goods);
+
+		//将保存的类别加一:先找出这个类别实体，在修改
+
+        //得到类别实体
+        QueryWrapper<GoodsCateEntity> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("cate_name", goods.getGintro());
+        GoodsCateEntity goodscatechange = goodsCateService.getOne(queryWrapper);
+
+        //刚加的类别数量加一更新 GoodsCateEntity(id=11, cateName=全素粥类, cateNum=2, cateIntro=素粥，甜粥)
+        goodscatechange.setCateNum(goodscatechange.getCateNum()+1);
+
+        //更具id更新
+        goodsCateService.updateById(goodscatechange);
 
         return R.ok();
     }

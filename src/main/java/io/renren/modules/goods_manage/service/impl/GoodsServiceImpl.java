@@ -18,9 +18,10 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsDao, GoodsEntity> impleme
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
+        String key=(String) params.get("key");
         IPage<GoodsEntity> page = this.page(
                 new Query<GoodsEntity>().getPage(params),
-                new QueryWrapper<GoodsEntity>()
+                new QueryWrapper<GoodsEntity>().like("id",key).or().like("gname",key)
         );
 
         return new PageUtils(page);
