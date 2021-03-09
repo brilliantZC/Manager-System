@@ -21,7 +21,7 @@ public class DayBillServiceImpl extends ServiceImpl<DayBillDao, DayBillEntity> i
         String key=(String) params.get("key");
         IPage<DayBillEntity> page = this.page(
                 new Query<DayBillEntity>().getPage(params),
-                new QueryWrapper<DayBillEntity>().like("id",key).or().like("bill_id",key)
+                new QueryWrapper<DayBillEntity>().like("id",key).or().like("day_billid",key)
         );
 
         return new PageUtils(page);
