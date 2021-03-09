@@ -18,9 +18,10 @@ public class BillServiceImpl extends ServiceImpl<BillDao, BillEntity> implements
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
+        String key=(String) params.get("key");
         IPage<BillEntity> page = this.page(
                 new Query<BillEntity>().getPage(params),
-                new QueryWrapper<BillEntity>()
+                new QueryWrapper<BillEntity>().like("id",key).or().like("day_billid",key)
         );
 
         return new PageUtils(page);
