@@ -79,6 +79,7 @@ public class BillController {
                 dayBillEntity.setDayIncome(dayBillEntity.getDayIncome()+bill.getBillAccount());
             }
             else dayBillEntity.setDayOutcome(dayBillEntity.getDayOutcome()+bill.getBillAccount());
+            dayBillEntity.setDayPure(dayBillEntity.getDayIncome()-dayBillEntity.getDayOutcome());
             dayBillService.updateById(dayBillEntity);
         }
         //如果不存在
@@ -92,11 +93,12 @@ public class BillController {
             }
             else {
                 dayBillEntity1.setDayIncome((float) 0);
-                dayBillEntity1.setDayOutcome((float) 0 + bill.getBillAccount());
+                dayBillEntity1.setDayOutcome((float) 0+bill.getBillAccount());
             }
+            dayBillEntity1.setDayPure(dayBillEntity1.getDayIncome()-dayBillEntity1.getDayOutcome());
             dayBillEntity1.setDayYear(bill.getBillId() / 10000);
             dayBillEntity1.setDayMon(bill.getBillId() % 10000 / 100);
-            dayBillEntity1.setDayDay(bill.getBillId() / 1000000);
+            dayBillEntity1.setDayDay(bill.getBillId() % 1000000);
             //求星期数
             String[] weeks = {"星期日","星期一","星期二","星期三","星期四","星期五","星期六"};
             int y=dayBillEntity1.getDayYear()%100;
@@ -110,8 +112,7 @@ public class BillController {
             int w = y + y / 4 + c / 4 - 2 * c + 13 * (m + 1) / 5 + d - 1;//蔡勒公式的公式
             while (w < 0) w += 7;//确保余数为正
             w %= 7;
-            System.out.println(w);
-            dayBillEntity1.setDayWeek(weeks[w]);
+            dayBillEntity1.setDayWeek(weeks[w+1]);
             dayBillService.save(dayBillEntity1);
         }
         return R.ok();
