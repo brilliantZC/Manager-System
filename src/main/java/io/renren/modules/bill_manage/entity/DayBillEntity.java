@@ -12,7 +12,7 @@ import lombok.Data;
  *
  * @author chenshun
  * @email sunlightcs@gmail.com
- * @date 2021-03-08 20:23:37
+ * @date 2021-03-10 10:31:52
  */
 @Data
 @TableName("day_bill")
@@ -52,5 +52,9 @@ public class DayBillEntity implements Serializable {
 	 *
 	 */
 	private Integer dayBillid;
+	/**
+	 *
+	 */
+	private Float dayPure;
 
 }

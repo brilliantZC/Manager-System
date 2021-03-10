@@ -9,7 +9,7 @@ import org.apache.ibatis.annotations.Mapper;
  *
  * @author chenshun
  * @email sunlightcs@gmail.com
- * @date 2021-03-08 20:23:37
+ * @date 2021-03-10 10:31:52
  */
 @Mapper
 public interface DayBillDao extends BaseMapper<DayBillEntity> {
