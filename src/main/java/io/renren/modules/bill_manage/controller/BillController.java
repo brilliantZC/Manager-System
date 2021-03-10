@@ -5,7 +5,9 @@ import java.util.Map;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.renren.modules.bill_manage.entity.DayBillEntity;
+import io.renren.modules.bill_manage.entity.MonBillEntity;
 import io.renren.modules.bill_manage.service.DayBillService;
+import io.renren.modules.bill_manage.service.MonBillService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,6 +37,8 @@ public class BillController {
     private BillService billService;
     @Autowired
     private DayBillService dayBillService;
+    @Autowired
+    private MonBillService monBillService;
 
     /**
      * 列表
@@ -114,6 +118,35 @@ public class BillController {
             w %= 7;
             dayBillEntity1.setDayWeek(weeks[w+1]);
             dayBillService.save(dayBillEntity1);
+        }
+
+        //月账单处理,同理
+        QueryWrapper<MonBillEntity> monqueryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("mon_mon",bill.getBillId() % 10000 / 100).eq("mon_year",bill.getBillId() / 10000);
+        MonBillEntity monBillEntity=monBillService.getOne(monqueryWrapper);
+        if(monBillEntity!=null){
+            if(bill.getBillInout().equals("1")){
+                monBillEntity.setMonIncome(monBillEntity.getMonIncome()+bill.getBillAccount());
+            }
+            else monBillEntity.setMonOutcome(monBillEntity.getMonOutcome()+bill.getBillAccount());
+            monBillEntity.setMonPure(monBillEntity.getMonIncome()-monBillEntity.getMonOutcome());
+            monBillService.updateById(monBillEntity);
+        }
+        else {
+            MonBillEntity monBillEntity1 = new MonBillEntity();
+            monBillEntity1.setMonBillid(bill.getBillId());
+            if(bill.getBillInout().equals("1")){
+                monBillEntity1.setMonIncome((float) 0+bill.getBillAccount());
+                monBillEntity1.setMonOutcome((float) 0);
+            }
+            else {
+                monBillEntity1.setMonIncome((float) 0);
+                monBillEntity1.setMonOutcome((float) 0+bill.getBillAccount());
+            }
+            monBillEntity1.setMonPure(monBillEntity1.getMonIncome()-monBillEntity1.getMonOutcome());
+            monBillEntity1.setMonYear(bill.getBillId() / 10000);
+            monBillEntity1.setMonMon(bill.getBillId() % 10000 / 100);
+            monBillService.save(monBillEntity1);
         }
         return R.ok();
     }

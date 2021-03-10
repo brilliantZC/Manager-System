@@ -18,9 +18,10 @@ public class MonBillServiceImpl extends ServiceImpl<MonBillDao, MonBillEntity> i
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
+        String key=(String) params.get("key");
         IPage<MonBillEntity> page = this.page(
                 new Query<MonBillEntity>().getPage(params),
-                new QueryWrapper<MonBillEntity>()
+                new QueryWrapper<MonBillEntity>().like("id",key).or().like("mon_billid",key)
         );
 
         return new PageUtils(page);
