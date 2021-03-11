@@ -3,6 +3,7 @@ package io.renren.modules.bill_manage.controller;
 import java.util.Arrays;
 import java.util.Map;
 
+import io.renren.modules.bill_manage.service.BillService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,6 +31,8 @@ import io.renren.common.utils.R;
 public class DayBillController {
     @Autowired
     private DayBillService dayBillService;
+    @Autowired
+    private BillService billService;
 
     /**
      * 列表
@@ -44,7 +47,7 @@ public class DayBillController {
 
 
     /**
-     * 信息
+     * 原始信息
      */
     @RequestMapping("/info/{id}")
     @RequiresPermissions("bill_manage:daybill:info")

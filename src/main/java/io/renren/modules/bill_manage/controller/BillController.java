@@ -89,7 +89,6 @@ public class BillController {
         else {
             DayBillEntity dayBillEntity1 = new DayBillEntity();
             dayBillEntity1.setDayBillid(bill.getBillId());
-            System.out.println();
             if(bill.getBillInout().equals("1")){
                 dayBillEntity1.setDayIncome((float) 0+bill.getBillAccount());
                 dayBillEntity1.setDayOutcome((float) 0);
