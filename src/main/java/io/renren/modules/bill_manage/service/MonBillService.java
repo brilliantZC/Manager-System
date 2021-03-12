@@ -16,5 +16,6 @@ import java.util.Map;
 public interface MonBillService extends IService<MonBillEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+    PageUtils queryPagemon(Map<String, Object> params);
 }
 
