@@ -16,5 +16,6 @@ import java.util.Map;
 public interface DayBillService extends IService<DayBillEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+    PageUtils queryPageday(Map<String, Object> params);
 }
 

@@ -27,4 +27,16 @@ public class DayBillServiceImpl extends ServiceImpl<DayBillDao, DayBillEntity> i
         return new PageUtils(page);
     }
 
+    @Override
+    public PageUtils queryPageday(Map<String, Object> params) {
+        String key=(String) params.get("key");
+        String key1=(String) params.get("key1");
+        IPage<DayBillEntity> page = this.page(
+                new Query<DayBillEntity>().getPage(params),
+                new QueryWrapper<DayBillEntity>().eq("day_mon",key).eq("day_year",key1)
+        );
+
+        return new PageUtils(page);
+    }
+
 }

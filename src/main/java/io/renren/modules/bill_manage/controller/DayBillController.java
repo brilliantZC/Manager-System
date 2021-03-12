@@ -47,6 +47,17 @@ public class DayBillController {
     }
 
     /**
+     * 列表
+     */
+    @RequestMapping("/listday")
+    @RequiresPermissions("bill_manage:daybill:listday")
+    public R listday(@RequestParam Map<String, Object> params){
+        PageUtils page = dayBillService.queryPageday(params);
+
+        return R.ok().put("page", page);
+    }
+
+    /**
      * 原始信息
      */
     @RequestMapping("/info/{id}")

@@ -42,17 +42,6 @@ public class MonBillController {
         return R.ok().put("page", page);
     }
 
-    /**
-     * 列表,查询日账单，用年，月
-     */
-    @RequestMapping("/listmon")
-    @RequiresPermissions("bill_manage:monbill:listmon")
-    public R listmon(@RequestParam Map<String, Object> params){
-        PageUtils page = monBillService.queryPagemon(params);
-
-        return R.ok().put("page", page);
-    }
-
 
     /**
      * 信息
