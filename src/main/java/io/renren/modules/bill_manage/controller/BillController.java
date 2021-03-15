@@ -161,11 +161,42 @@ public class BillController {
     }
 
     /**
-     * 删除
+     * 删除  在账单中删除一条账单时应将对应的日月账单金额进行修改
      */
     @RequestMapping("/delete")
     @RequiresPermissions("bill_manage:bill:delete")
     public R delete(@RequestBody Integer[] ids){
+        //拿到所有的要删除的实体
+        BillEntity[] deleteEntity=new BillEntity[ids.length];
+        for(int i=0;i<ids.length;i++){
+            deleteEntity[i]= billService.getById(ids[i]);
+        }
+        //对日月账单的金额进行修改
+        for(int i=0;i<ids.length;i++){
+            //在删除一条账目时将其bill_id 与日账单中的daybillid对比，相同的进行金额的处理
+            QueryWrapper<DayBillEntity> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("day_billid",deleteEntity[i].getBillId());
+            DayBillEntity dayBillEntity=dayBillService.getOne(queryWrapper);
+            //拿到日账单实体对其收支进行更新
+            if(deleteEntity[i].getBillInout().equals("1")){
+                dayBillEntity.setDayIncome(dayBillEntity.getDayIncome()-deleteEntity[i].getBillAccount());
+            }
+            else dayBillEntity.setDayOutcome(dayBillEntity.getDayOutcome()-deleteEntity[i].getBillAccount());
+            dayBillEntity.setDayPure(dayBillEntity.getDayIncome()-dayBillEntity.getDayOutcome());
+            dayBillService.updateById(dayBillEntity);
+
+            //对月账单进行处理
+            QueryWrapper<MonBillEntity> monqueryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("mon_mon",deleteEntity[i].getBillId() % 10000 / 100).eq("mon_year",deleteEntity[i].getBillId() / 10000);
+            MonBillEntity monBillEntity=monBillService.getOne(monqueryWrapper);
+            //拿到月账单实体对其收支进行更新
+            if(deleteEntity[i].getBillInout().equals("1")){
+                monBillEntity.setMonIncome(monBillEntity.getMonIncome()-deleteEntity[i].getBillAccount());
+            }
+            else monBillEntity.setMonOutcome(monBillEntity.getMonOutcome()-deleteEntity[i].getBillAccount());
+            monBillEntity.setMonPure(monBillEntity.getMonIncome()-monBillEntity.getMonOutcome());
+            monBillService.updateById(monBillEntity);
+        }
 		billService.removeByIds(Arrays.asList(ids));
 
         return R.ok();
