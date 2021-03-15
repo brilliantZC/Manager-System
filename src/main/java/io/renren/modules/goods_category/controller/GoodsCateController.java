@@ -1,6 +1,8 @@
 package io.renren.modules.goods_category.controller;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -87,4 +89,19 @@ public class GoodsCateController {
         return R.ok();
     }
 
+    /**
+     * 将粥的种类名和数量传给前端
+     */
+    @RequestMapping("/tblist")
+    public R tblist(@RequestParam Map<String, Object> params){
+        PageUtils page = goodsCateService.queryPage(params);
+        List gcname=new ArrayList();
+        List gcnum= new ArrayList();
+        for (int i = 10; i < 10+goodsCateService.count(); i++) {
+            gcname.add(goodsCateService.getById(i).getCateName());
+            gcnum.add(goodsCateService.getById(i).getCateNum());
+        }
+
+        return R.ok().put("page", page).put("gcname",gcname).put("gcnum",gcnum);
+    }
 }
