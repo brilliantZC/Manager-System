@@ -32,8 +32,6 @@ import io.renren.common.utils.R;
 public class DayBillController {
     @Autowired
     private DayBillService dayBillService;
-    @Autowired
-    private BillService billService;
 
     /**
      * 列表

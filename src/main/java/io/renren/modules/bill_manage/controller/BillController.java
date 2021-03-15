@@ -102,7 +102,7 @@ public class BillController {
             dayBillEntity1.setDayMon(bill.getBillId() % 10000 / 100);
             dayBillEntity1.setDayDay(bill.getBillId() % 1000000);
             //求星期数
-            String[] weeks = {"星期日","星期一","星期二","星期三","星期四","星期五","星期六"};
+            String[] weeks = {"星期一","星期二","星期三","星期四","星期五","星期六","星期日"};
             int y=dayBillEntity1.getDayYear()%100;
             int c=dayBillEntity1.getDayYear()/100;
             int m=dayBillEntity1.getDayMon();
@@ -114,7 +114,7 @@ public class BillController {
             int w = y + y / 4 + c / 4 - 2 * c + 13 * (m + 1) / 5 + d - 1;//蔡勒公式的公式
             while (w < 0) w += 7;//确保余数为正
             w %= 7;
-            dayBillEntity1.setDayWeek(weeks[w+1]);
+            dayBillEntity1.setDayWeek(weeks[w]);
             dayBillService.save(dayBillEntity1);
         }
 
