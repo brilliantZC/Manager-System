@@ -1,6 +1,8 @@
 package io.renren.modules.bill_manage.service.impl;
 
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -28,6 +30,11 @@ public class DayBillServiceImpl extends ServiceImpl<DayBillDao, DayBillEntity> i
     }
 
     @Override
+    public List<DayBillEntity> selectAll() {
+        return baseMapper.selectList(new QueryWrapper<DayBillEntity>().like("day_year",2));
+    }
+
+    @Override
     public PageUtils queryPageday(Map<String, Object> params) {
         String key=(String) params.get("key");
         String key1=(String) params.get("key1");
@@ -38,5 +45,6 @@ public class DayBillServiceImpl extends ServiceImpl<DayBillDao, DayBillEntity> i
 
         return new PageUtils(page);
     }
+
 
 }

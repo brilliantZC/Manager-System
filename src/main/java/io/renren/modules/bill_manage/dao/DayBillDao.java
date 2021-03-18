@@ -4,6 +4,8 @@ import io.renren.modules.bill_manage.entity.DayBillEntity;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 /**
  *
  *
@@ -13,5 +15,4 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface DayBillDao extends BaseMapper<DayBillEntity> {
-
 }

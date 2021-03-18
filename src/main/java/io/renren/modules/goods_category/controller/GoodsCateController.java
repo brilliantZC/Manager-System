@@ -104,4 +104,5 @@ public class GoodsCateController {
 
         return R.ok().put("page", page).put("gcname",gcname).put("gcnum",gcnum);
     }
+
 }

@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import io.renren.common.utils.PageUtils;
 import io.renren.modules.bill_manage.entity.DayBillEntity;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -17,5 +18,6 @@ public interface DayBillService extends IService<DayBillEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
     PageUtils queryPageday(Map<String, Object> params);
+    List<DayBillEntity> selectAll();
 }
 
