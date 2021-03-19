@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import io.renren.modules.goods_category.entity.Charpie;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -90,7 +91,7 @@ public class GoodsCateController {
     }
 
     /**
-     * 将粥的种类名和数量传给前端
+     * 将粥的种类名和数量传给前端（用于柱状图）
      */
     @RequestMapping("/tblist")
     public R tblist(@RequestParam Map<String, Object> params){
@@ -101,8 +102,25 @@ public class GoodsCateController {
             gcname.add(goodsCateService.getById(i).getCateName());
             gcnum.add(goodsCateService.getById(i).getCateNum());
         }
-
+        System.out.println(gcname);
         return R.ok().put("page", page).put("gcname",gcname).put("gcnum",gcnum);
     }
-
+    /**
+     * 将粥的种类名和数量传给前端(用于饼图，传入的数量应该是实体，而不能单单传数字）
+     */
+    @RequestMapping("/tblist1")
+    public R tblist1(@RequestParam Map<String, Object> params){
+        PageUtils page = goodsCateService.queryPage(params);
+        List<Charpie> gcnum=new ArrayList();
+        List gcname=new ArrayList();
+        for (int i = 10; i < 10+goodsCateService.count(); i++) {
+            Charpie charpie=new Charpie();
+            charpie.setName(goodsCateService.getById(i).getCateName());
+            charpie.setValue(goodsCateService.getById(i).getCateNum());
+            gcnum.add(charpie);
+            gcname.add(goodsCateService.getById(i).getCateName());
+        }
+        System.out.println(gcnum);
+        return R.ok().put("page", page).put("gcname",gcname).put("gcnum",gcnum);
+    }
 }
