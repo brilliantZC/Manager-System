@@ -120,7 +120,6 @@ public class GoodsCateController {
             gcnum.add(charpie);
             gcname.add(goodsCateService.getById(i).getCateName());
         }
-        System.out.println(gcnum);
         return R.ok().put("page", page).put("gcname",gcname).put("gcnum",gcnum);
     }
 }
