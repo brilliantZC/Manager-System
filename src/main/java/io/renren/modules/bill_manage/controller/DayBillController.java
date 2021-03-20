@@ -1,17 +1,13 @@
 package io.renren.modules.bill_manage.controller;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import io.renren.modules.bill_manage.entity.CharpieEntity;
 import io.renren.modules.bill_manage.service.BillService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import io.renren.modules.bill_manage.entity.DayBillEntity;
 import io.renren.modules.bill_manage.service.DayBillService;
@@ -32,6 +28,7 @@ import io.renren.common.utils.R;
 public class DayBillController {
     @Autowired
     private DayBillService dayBillService;
+
 
     /**
      * 列表
@@ -56,6 +53,70 @@ public class DayBillController {
     }
 
     /**
+     * 查出收支用于绘制日账单饼图
+     */
+    @RequestMapping("/countinout")
+    public R countinout(@RequestParam(required=false) String billdate){
+        String[] mname={"收入","支出"};
+        List<CharpieEntity> mnum=new ArrayList();
+        //如果为空就数据库中最后一条数据绘制图表
+        if(billdate.isEmpty()){
+            DayBillEntity dayBillEntity=dayBillService.getById(dayBillService.count());
+            billdate=""+dayBillEntity.getDayBillid();
+            CharpieEntity charpie=new CharpieEntity();
+            charpie.setValue(dayBillEntity.getDayIncome());
+            charpie.setName(mname[0]);
+            mnum.add(charpie);
+            CharpieEntity charpie1=new CharpieEntity();
+            charpie1.setValue(dayBillEntity.getDayOutcome());
+            charpie1.setName(mname[1]);
+            mnum.add(charpie1);
+        }
+        else{
+            int billdateint=Integer.parseInt(billdate);
+            //拿到日账单实体
+            DayBillEntity dayBillEntity=dayBillService.getOne(new QueryWrapper<DayBillEntity>().eq("day_billid",billdateint));
+            //如果不存在该日期的日账单就绘制收入0，支出0
+            if(dayBillEntity==null){
+                CharpieEntity charpie=new CharpieEntity();
+                charpie.setName(mname[0]);
+                charpie.setValue((float)0);
+                mnum.add(charpie);
+                CharpieEntity charpie1=new CharpieEntity();
+                charpie1.setName(mname[1]);
+                charpie1.setValue((float)0);
+                mnum.add(charpie1);
+            }
+            else {
+                CharpieEntity charpie=new CharpieEntity();
+                charpie.setValue(dayBillEntity.getDayIncome());
+                charpie.setName(mname[0]);
+                mnum.add(charpie);
+                CharpieEntity charpie1=new CharpieEntity();
+                charpie1.setValue(dayBillEntity.getDayOutcome());
+                charpie1.setName(mname[1]);
+                mnum.add(charpie1);
+            }
+        }
+
+        return R.ok().put("mname",mname).put("mnum",mnum).put("billdate",billdate);
+    }
+
+    /**
+     * 查出收支用于绘制日账单饼图
+     */
+    @RequestMapping("/daybilllist")
+    public R daybilllist(@RequestParam Map<String, Object> params){
+        PageUtils page = dayBillService.queryPage(params);
+        List zname=new ArrayList();
+        List znum=new ArrayList();
+        for (int i = 1; i <= dayBillService.count(); i++) {
+            zname.add(dayBillService.getById(i).getDayBillid());
+            znum.add(dayBillService.getById(i).getDayPure());
+        }
+        return R.ok().put("page", page).put("zname",zname).put("znum",znum);
+    }
+    /**
      * 原始信息
      */
     @RequestMapping("/info/{id}")
@@ -65,8 +126,6 @@ public class DayBillController {
 
         return R.ok().put("dayBill", dayBill);
     }
-
-
 
 
     /**

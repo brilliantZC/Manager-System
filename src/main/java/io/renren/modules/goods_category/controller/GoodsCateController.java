@@ -102,9 +102,9 @@ public class GoodsCateController {
             gcname.add(goodsCateService.getById(i).getCateName());
             gcnum.add(goodsCateService.getById(i).getCateNum());
         }
-        System.out.println(gcname);
         return R.ok().put("page", page).put("gcname",gcname).put("gcnum",gcnum);
     }
+
     /**
      * 将粥的种类名和数量传给前端(用于饼图，传入的数量应该是实体，而不能单单传数字）
      */
