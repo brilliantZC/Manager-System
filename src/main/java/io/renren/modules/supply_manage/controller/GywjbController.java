@@ -3,6 +3,9 @@ package io.renren.modules.supply_manage.controller;
 import java.util.Arrays;
 import java.util.Map;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import io.renren.modules.supply_manage.entity.GyuserEntity;
+import io.renren.modules.supply_manage.service.GyuserService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,6 +33,8 @@ import io.renren.common.utils.R;
 public class GywjbController {
     @Autowired
     private GywjbService gywjbService;
+    @Autowired
+    private GyuserService gyuserService;
 
     /**
      * 列表
@@ -60,8 +65,17 @@ public class GywjbController {
     @RequestMapping("/save")
     @RequiresPermissions("supply_manage:gywjb:save")
     public R save(@RequestBody GywjbEntity gywjb){
+        //根据姓名和手机号码在供应人员表中找是否有相同的,不相同则加入供应商表
+        GyuserEntity gyuserEntity=gyuserService.getOne(new QueryWrapper<GyuserEntity>().eq("gyname",gywjb.getName()).eq("gyphone",gywjb.getPhone()));
+        if(gyuserEntity==null){
+            gyuserEntity.setGyname(gywjb.getName());
+            gyuserEntity.setGyphone(gywjb.getPhone());
+            gyuserEntity.setGyaddress(gywjb.getAddress());
+            gyuserEntity.setGycount(0);
+            gyuserEntity.setFlag(1);
+            gyuserService.save(gyuserEntity);
+        }
 		gywjbService.save(gywjb);
-
         return R.ok();
     }
 
