@@ -26,4 +26,14 @@ public class WjlxbServiceImpl extends ServiceImpl<WjlxbDao, WjlxbEntity> impleme
         return new PageUtils(page);
     }
 
+    @Override
+    public PageUtils fbqueryPage(Map<String, Object> params) {
+        IPage<WjlxbEntity> page = this.page(
+                new Query<WjlxbEntity>().getPage(params),
+                new QueryWrapper<WjlxbEntity>().eq("jddm","1")
+        );
+
+        return new PageUtils(page);
+    }
+
 }
