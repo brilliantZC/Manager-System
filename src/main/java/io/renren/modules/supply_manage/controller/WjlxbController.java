@@ -3,6 +3,7 @@ package io.renren.modules.supply_manage.controller;
 import java.util.Arrays;
 import java.util.Map;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -60,8 +61,13 @@ public class WjlxbController {
     @RequestMapping("/save")
     @RequiresPermissions("supply_manage:wjlxb:save")
     public R save(@RequestBody WjlxbEntity wjlxb){
-		wjlxbService.save(wjlxb);
-
+        WjlxbEntity wjlxbEntity=wjlxbService.getOne(new QueryWrapper<WjlxbEntity>().eq("wjlxdm",wjlxb.getWjlxdm()).or().eq("jdmc",wjlxb.getJddm()));
+		if(wjlxbEntity!=null){
+		    return R.error("已存在！！！");
+        }
+        else {
+            wjlxbService.save(wjlxb);
+        }
         return R.ok();
     }
 

@@ -88,5 +88,13 @@ public class GywjbEntity implements Serializable {
 	 * 文件类型代码
 	 */
 	private String wjlxdm;
+	/**
+	 * 总状态代码
+	 */
+	private String zztdm;
+	/**
+	 * 总状态名称
+	 */
+	private String zztmc;
 
 }
