@@ -46,10 +46,23 @@ public class WjlxbController {
         return R.ok().put("page", page);
     }
 
+    /**
+     * 发布阶段文件
+     * @param params
+     * @return
+     */
     @RequestMapping("/fbwjlist")
     public R fbwjlist(@RequestParam Map<String, Object> params){
         PageUtils page = wjlxbService.fbqueryPage(params);
-
+        List<FbwjEntity> fbwjEntities = new ArrayList();
+        FbwjEntity fbwjEntity1=new FbwjEntity();
+        fbwjEntity1.setWjmc("");fbwjEntity1.setWjdz("");fbwjEntity1.setWjlxdm("AQS");fbwjEntity1.setWjlxmc("安全书");
+        fbwjEntity1.setZtdm("0");fbwjEntity1.setZtmc("未上传");fbwjEntity1.setZztdm("0");fbwjEntity1.setZztmc("供应商发布");
+        fbwjEntities.add(fbwjEntity1);
+        FbwjEntity fbwjEntity2=new FbwjEntity();
+        fbwjEntity2.setWjmc("");fbwjEntity2.setWjdz("");fbwjEntity2.setWjlxdm("GYXK");fbwjEntity2.setWjlxmc("供应许可");fbwjEntity2.setZtdm("0");
+        fbwjEntity2.setZtmc("未上传");fbwjEntity2.setZztdm("0");fbwjEntity2.setZztmc("供应商发布");fbwjEntities.add(fbwjEntity2);
+        page.setList(fbwjEntities);
         return R.ok().put("page", page);
     }
 

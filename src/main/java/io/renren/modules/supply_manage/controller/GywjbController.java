@@ -75,6 +75,12 @@ public class GywjbController {
             gyuserEntity.setFlag(1);
             gyuserService.save(gyuserEntity);
         }
+        gywjb.setZtdm(1);
+        gywjb.setZtmc("已上传");
+        gywjb.setWjdz("");
+        gywjb.setWjmc("");
+        gywjb.setZztdm("");
+        gywjb.setZztmc("");
 		gywjbService.save(gywjb);
         return R.ok();
     }
