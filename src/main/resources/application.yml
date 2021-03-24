@@ -74,3 +74,10 @@ renren:
     # token有效时长，7天，单位秒
     expire: 604800
     header: token
+
+    #上传文件路径配置
+UploadPath:
+  path: C:/upload/ #本地文件路径
+  httppath: http://localhost:8080/renren-fast/uploadfile/   #本机虚拟路径（文件目录）,文件在线查看地址
+  xnljdyml: /uploadfile/  #虚拟路径对应目录--WebMvcConfig中配置
+  sbsmbwj: ${UploadPath.path}WJMB/ #申报书模板文件本地文件路径
