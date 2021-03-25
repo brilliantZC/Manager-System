@@ -222,7 +222,8 @@ public class GywjbController {
         String xx = uploadPath.getPath(); //文件的上传地址（文件夹）C:/upload/
         String dir =xx+wjdz; //文件目录 C:/upload/2018SB0078_SBCL_180.docx
         File file=new File(dir);     //1.获取要下载的文件的绝对路径 C:/upload/2018SB0078_SBCL_180.docx
-        String newDname=wjdz;     //2.获取要下载的文件名 2018SB0078_SBCL_180.docx
+        String newDname=wjdz;
+        //2.获取要下载的文件名 2018SB0078_SBCL_180.docx
 
         FileInputStream fileIn = null;
         try {
