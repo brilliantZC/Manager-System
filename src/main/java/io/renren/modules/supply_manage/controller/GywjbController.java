@@ -126,11 +126,8 @@ public class GywjbController {
             if (!dir.exists()) {
                 dir.mkdir();
             }
-
-            String name = params.get("name").toString();
             String wjlxdm = params.get("wjlxdm").toString();
             String wjlxmc = params.get("wjlxmc").toString();
-            System.out.println(name+wjlxdm);
             Date date = new Date();
             SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
             int time = Integer.parseInt(formatter.format(date)); //当前日期
