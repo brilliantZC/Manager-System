@@ -7,6 +7,8 @@ import java.util.Map;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.renren.modules.supply_manage.entity.FbwjEntity;
+import io.renren.modules.supply_manage.entity.GywjbEntity;
+import io.renren.modules.supply_manage.service.GywjbService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,6 +36,8 @@ import io.renren.common.utils.R;
 public class WjlxbController {
     @Autowired
     private WjlxbService wjlxbService;
+    @Autowired
+    private GywjbService gywjbService;
 
     /**
      * 列表
@@ -63,6 +67,21 @@ public class WjlxbController {
         fbwjEntity2.setWjmc("");fbwjEntity2.setWjdz("");fbwjEntity2.setWjlxdm("GYXK");fbwjEntity2.setWjlxmc("供应许可");fbwjEntity2.setZtdm("0");
         fbwjEntity2.setZtmc("未上传");fbwjEntity2.setZztdm("0");fbwjEntity2.setZztmc("供应商发布");fbwjEntities.add(fbwjEntity2);
         page.setList(fbwjEntities);
+        return R.ok().put("page", page);
+    }
+
+    /**
+     * 发布阶段文件:上传文件刷新数据
+     * @param params
+     * @return
+     */
+    @RequestMapping("/scwjlist")
+    public R scwjlist(@RequestParam Map<String, Object> params){
+        PageUtils page = wjlxbService.fbqueryPage(params);
+        List<GywjbEntity> scwjwc=new ArrayList();
+        scwjwc.add(gywjbService.getOne(new QueryWrapper<GywjbEntity>().eq("ztdm",1).eq("wjlxdm","AQS")));
+        scwjwc.add(gywjbService.getOne(new QueryWrapper<GywjbEntity>().eq("ztdm",1).eq("wjlxdm","GYXK")));
+        page.setList(scwjwc);
         return R.ok().put("page", page);
     }
 

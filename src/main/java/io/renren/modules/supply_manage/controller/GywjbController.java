@@ -138,8 +138,6 @@ public class GywjbController {
             String cswjdz = (wjmc.replaceAll("\\-", "") + suffix); //在地址后加上后缀
             wjdz = uploadDir + cswjdz;
 
-            System.out.println(wjdz+"********"+cswjdz);
-
             File serverFile = new File(uploadDir + cswjdz);
             file.transferTo(serverFile);
         } catch (IOException e) {
@@ -153,10 +151,8 @@ public class GywjbController {
      */
     @RequestMapping("/bjsave")
     public R bjsave(@RequestBody FbwjEntity fbwjEntity){
-        System.out.println("*************");
-        System.out.println(fbwjEntity);
         //查到就更新，查不到保存
-        GywjbEntity gywjb=gywjbService.getOne(new QueryWrapper<GywjbEntity>().eq("name",fbwjEntity.getName()).eq("zztdm",""));
+        GywjbEntity gywjb=gywjbService.getOne(new QueryWrapper<GywjbEntity>().eq("wjlxdm",fbwjEntity.getWjlxdm()).eq("ztdm",fbwjEntity.getZtdm()));
         if(gywjb==null){
             GywjbEntity gywjbEntity=new GywjbEntity();
             gywjbEntity.setWjlxdm(fbwjEntity.getWjlxdm());  //文件类型代码
