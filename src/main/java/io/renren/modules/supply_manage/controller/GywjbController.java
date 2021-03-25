@@ -59,6 +59,16 @@ public class GywjbController {
         return R.ok().put("page", page);
     }
 
+    /**
+     * 供应阶段，只用展示安全书一条实例列表
+     */
+    @RequestMapping("/gylist")
+    public R gylist(@RequestParam Map<String, Object> params){
+        PageUtils page = gywjbService.gyqueryPage(params);
+
+        return R.ok().put("page", page);
+    }
+
 
     /**
      * 信息
@@ -80,14 +90,35 @@ public class GywjbController {
         //根据姓名和手机号码在供应人员表中找是否有相同的,不相同则加入供应商表
         GyuserEntity gyuserEntity=gyuserService.getOne(new QueryWrapper<GyuserEntity>().eq("gyname",gywjb.getName()).eq("gyphone",gywjb.getPhone()));
         if(gyuserEntity==null) {
-            gyuserEntity.setGyname(gywjb.getName());
-            gyuserEntity.setGyphone(gywjb.getPhone());
-            gyuserEntity.setGyaddress(gywjb.getAddress());
-            gyuserEntity.setGycount(0);
-            gyuserEntity.setFlag(1);
-            gyuserService.save(gyuserEntity);
+            GyuserEntity user=new GyuserEntity();
+            user.setGyname(gywjb.getName());
+            user.setGyphone(gywjb.getPhone());
+            user.setGyaddress(gywjb.getAddress());
+            user.setGycount(1);
+            user.setFlag(1);
+            gyuserService.save(user);
         }
-		gywjbService.save(gywjb);
+        else{
+            //若有此用户，交易次数加一
+            gyuserEntity.setGycount(gyuserEntity.getGycount()+1);
+        }
+        //更新gywjb剩余内容
+        GywjbEntity gywjbEntity1=gywjbService.getOne(new QueryWrapper<GywjbEntity>().eq("wjlxdm","AQS").eq("zztdm","0"));
+        GywjbEntity gywjbEntity2=gywjbService.getOne(new QueryWrapper<GywjbEntity>().eq("wjlxdm","GYXK").eq("zztdm","0"));
+        gywjbEntity1.setName(gywjb.getName()); gywjbEntity2.setName(gywjb.getName());
+        gywjbEntity1.setPhone(gywjb.getPhone());gywjbEntity2.setPhone(gywjb.getPhone());
+        gywjbEntity1.setAddress(gywjb.getAddress());gywjbEntity2.setAddress(gywjb.getAddress());
+        gywjbEntity1.setMaterialName(gywjb.getMaterialName());gywjbEntity2.setMaterialName(gywjb.getMaterialName());
+        gywjbEntity1.setMaterialPrice(gywjb.getMaterialPrice());gywjbEntity2.setMaterialPrice(gywjb.getMaterialPrice());
+        gywjbEntity1.setMaterialNum(gywjb.getMaterialNum());gywjbEntity2.setMaterialNum(gywjb.getMaterialNum());
+        gywjbEntity1.setKsri(gywjb.getKsri());gywjbEntity2.setKsri(gywjb.getKsri());
+        gywjbEntity1.setJsrq(gywjb.getJsrq());gywjbEntity2.setJsrq(gywjb.getJsrq());
+        gywjbEntity1.setShfs(gywjb.getShfs()); gywjbEntity2.setShfs(gywjb.getShfs());
+        gywjbEntity1.setIntro(gywjb.getIntro()); gywjbEntity2.setIntro(gywjb.getIntro());
+        gywjbEntity1.setZztmc("供应商发布");gywjbEntity2.setZztmc("供应商发布");
+        gywjbEntity1.setZztdm("1");gywjbEntity2.setZztdm("1");
+		gywjbService.updateById(gywjbEntity1);
+        gywjbService.updateById(gywjbEntity2);
         return R.ok();
     }
 

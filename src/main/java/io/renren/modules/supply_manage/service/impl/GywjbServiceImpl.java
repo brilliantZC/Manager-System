@@ -26,4 +26,15 @@ public class GywjbServiceImpl extends ServiceImpl<GywjbDao, GywjbEntity> impleme
         return new PageUtils(page);
     }
 
+    @Override
+    public PageUtils gyqueryPage(Map<String, Object> params) {
+
+        IPage<GywjbEntity> page = this.page(
+                new Query<GywjbEntity>().getPage(params),
+                new QueryWrapper<GywjbEntity>().eq("zztdm","1").eq("wjlxdm","AQS")
+        );
+
+        return new PageUtils(page);
+    }
+
 }
