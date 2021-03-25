@@ -3,6 +3,7 @@ package io.renren.modules.supply_manage.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import io.renren.common.utils.PageUtils;
 import io.renren.modules.supply_manage.entity.GyuserEntity;
+import io.renren.modules.supply_manage.entity.GywjbEntity;
 
 import java.util.Map;
 
@@ -16,5 +17,6 @@ import java.util.Map;
 public interface GyuserService extends IService<GyuserEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+
 }
 

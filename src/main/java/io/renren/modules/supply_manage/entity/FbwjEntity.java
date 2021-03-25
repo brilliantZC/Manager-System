@@ -1,6 +1,7 @@
 package io.renren.modules.supply_manage.entity;
 
 public class FbwjEntity {
+    private String name;//发布人
     private String wjlxmc;//文件类型
     private String wjlxdm;//文件类型代码
     private String wjmc;//文件名称
@@ -13,7 +14,8 @@ public class FbwjEntity {
     public FbwjEntity() {
     }
 
-    public FbwjEntity(String wjlxmc, String wjlxdm, String wjmc, String wjdz, String ztdm, String ztmc, String zztdm, String zztmc) {
+    public FbwjEntity(String name,String wjlxmc, String wjlxdm, String wjmc, String wjdz, String ztdm, String ztmc, String zztdm, String zztmc) {
+        this.name = name;
         this.wjlxmc = wjlxmc;
         this.wjlxdm = wjlxdm;
         this.wjmc = wjmc;
@@ -22,6 +24,14 @@ public class FbwjEntity {
         this.ztmc = ztmc;
         this.zztdm = zztdm;
         this.zztmc = zztmc;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getWjlxmc() {
@@ -91,7 +101,8 @@ public class FbwjEntity {
     @Override
     public String toString() {
         return "FbwjEntity{" +
-                "wjlxmc='" + wjlxmc + '\'' +
+                "name='" + name + '\'' +
+                ", wjlxmc='" + wjlxmc + '\'' +
                 ", wjlxdm='" + wjlxdm + '\'' +
                 ", wjmc='" + wjmc + '\'' +
                 ", wjdz='" + wjdz + '\'' +
