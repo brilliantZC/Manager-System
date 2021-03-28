@@ -99,6 +99,7 @@ public class GywjbController {
         else{
             //若有此用户，交易次数加一
             gyuserEntity.setGycount(gyuserEntity.getGycount()+1);
+            gyuserService.updateById(gyuserEntity);
         }
         //更新gywjb剩余内容
         GywjbEntity gywjbEntity1=gywjbService.getOne(new QueryWrapper<GywjbEntity>().eq("wjlxdm","AQS").eq("zztdm","0"));

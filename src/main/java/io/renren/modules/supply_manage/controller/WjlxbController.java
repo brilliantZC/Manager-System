@@ -79,7 +79,7 @@ public class WjlxbController {
     public R scwjlist(@RequestParam Map<String, Object> params){
         PageUtils page = wjlxbService.fbqueryPage(params);
         List<GywjbEntity> scwjwc=new ArrayList();
-        scwjwc.add(gywjbService.getOne(new QueryWrapper<GywjbEntity>().eq("ztdm",1).eq("wjlxdm","AQS")));
+        scwjwc.add(gywjbService.getOne(new QueryWrapper<GywjbEntity>().eq("ztdm", 1).eq("wjlxdm", "AQS")));
         scwjwc.add(gywjbService.getOne(new QueryWrapper<GywjbEntity>().eq("ztdm",1).eq("wjlxdm","GYXK")));
         page.setList(scwjwc);
         return R.ok().put("page", page);
