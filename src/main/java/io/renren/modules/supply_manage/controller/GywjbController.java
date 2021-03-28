@@ -50,13 +50,13 @@ public class GywjbController {
      * 列表
      */
     @RequestMapping("/list")
+
     @RequiresPermissions("supply_manage:gywjb:list")
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = gywjbService.queryPage(params);
 
         return R.ok().put("page", page);
     }
-
 
     /**
      * 供应阶段，只用展示安全书一条实例列表
