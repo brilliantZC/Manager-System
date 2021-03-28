@@ -32,7 +32,18 @@ public class GywjbServiceImpl extends ServiceImpl<GywjbDao, GywjbEntity> impleme
 
         IPage<GywjbEntity> page = this.page(
                 new Query<GywjbEntity>().getPage(params),
-                new QueryWrapper<GywjbEntity>().eq("zztdm","1").eq("wjlxdm","AQS")
+                new QueryWrapper<GywjbEntity>().eq("wjlxdm","AQS")
+        );
+
+        return new PageUtils(page);
+    }
+
+    @Override
+    public PageUtils xgqueryPage(Map<String, Object> params) {
+        int key=(Integer) params.get("key");
+        IPage<GywjbEntity> page = this.page(
+                new Query<GywjbEntity>().getPage(params),
+                new QueryWrapper<GywjbEntity>().eq("uid",key)
         );
 
         return new PageUtils(page);

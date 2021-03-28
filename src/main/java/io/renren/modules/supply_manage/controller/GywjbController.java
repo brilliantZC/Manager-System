@@ -81,6 +81,24 @@ public class GywjbController {
     }
 
     /**
+     * 选购信息
+     */
+    @RequestMapping("/xginfo/{id}")
+    public R xginfo(@PathVariable("id") Integer id){
+        GywjbEntity gywjb = gywjbService.getById(id);
+        Map<String,Object> map=new HashMap<>();
+        map.put("key",gywjb.getUid());
+        PageUtils page = gywjbService.xgqueryPage(map);
+        List<GywjbEntity> gywjbEntities= (List<GywjbEntity>) page.getList();
+        for (GywjbEntity e : gywjbEntities) {
+            e.setZztdm("3");
+            e.setZztmc("已选购");
+            gywjbService.updateById(e);
+        }
+        return R.ok();
+    }
+
+    /**
      * 保存
      */
     @RequestMapping("/save")
