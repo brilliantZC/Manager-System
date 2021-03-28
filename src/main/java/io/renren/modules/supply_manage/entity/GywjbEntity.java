@@ -96,5 +96,9 @@ public class GywjbEntity implements Serializable {
 	 * 总状态名称
 	 */
 	private String zztmc;
+	/**
+	 * 订单id
+	 */
+	private int uid;
 
 }

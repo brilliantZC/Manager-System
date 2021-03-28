@@ -5,17 +5,17 @@ import java.net.InetAddress;
 import java.net.URLEncoder;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Map;
+import java.util.*;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.sun.javaws.IconUtil;
 import io.renren.common.utils.Query;
+import io.renren.common.utils.ShiroUtils;
 import io.renren.modules.supply_manage.entity.FbwjEntity;
 import io.renren.modules.supply_manage.entity.GyuserEntity;
 import io.renren.modules.supply_manage.entity.UploadPath;
 import io.renren.modules.supply_manage.service.GyuserService;
+import io.renren.modules.sys.entity.SysUserEntity;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -56,6 +56,7 @@ public class GywjbController {
 
         return R.ok().put("page", page);
     }
+
 
     /**
      * 供应阶段，只用展示安全书一条实例列表
@@ -116,6 +117,11 @@ public class GywjbController {
         gywjbEntity1.setIntro(gywjb.getIntro()); gywjbEntity2.setIntro(gywjb.getIntro());
         gywjbEntity1.setZztmc("供应商发布");gywjbEntity2.setZztmc("供应商发布");
         gywjbEntity1.setZztdm("1");gywjbEntity2.setZztdm("1");
+        Date date = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
+        int time = Integer.parseInt(formatter.format(date)); //当前日期
+        int num=gywjbService.count(new QueryWrapper<GywjbEntity>().eq("uid","%time%"));
+        gywjbEntity1.setUid(time+num+1);gywjbEntity2.setUid(time+num+1);
 		gywjbService.updateById(gywjbEntity1);
         gywjbService.updateById(gywjbEntity2);
         return R.ok();

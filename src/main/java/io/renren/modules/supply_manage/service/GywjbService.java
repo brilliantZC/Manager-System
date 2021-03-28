@@ -16,6 +16,8 @@ import java.util.Map;
 public interface GywjbService extends IService<GywjbEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+
     PageUtils gyqueryPage(Map<String, Object> params);
+
 }
 
