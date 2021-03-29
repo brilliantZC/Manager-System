@@ -99,6 +99,41 @@ public class GywjbController {
     }
 
     /**
+     * 成功信息
+     */
+    @RequestMapping("/cginfo/{id}")
+    public R cginfo(@PathVariable("id") Integer id){
+        GywjbEntity gywjb = gywjbService.getById(id);
+        Map<String,Object> map=new HashMap<>();
+        map.put("key",gywjb.getUid());
+        PageUtils page = gywjbService.xgqueryPage(map);
+        List<GywjbEntity> gywjbEntities= (List<GywjbEntity>) page.getList();
+        for (GywjbEntity e : gywjbEntities) {
+            e.setZztdm("4");
+            e.setZztmc("交易完成");
+            gywjbService.updateById(e);
+        }
+        return R.ok();
+    }
+    /**
+     * 成功信息
+     */
+    @RequestMapping("/qrinfo/{id}")
+    public R qrinfo(@PathVariable("id") Integer id){
+        GywjbEntity gywjb = gywjbService.getById(id);
+        Map<String,Object> map=new HashMap<>();
+        map.put("key",gywjb.getUid());
+        PageUtils page = gywjbService.xgqueryPage(map);
+        List<GywjbEntity> gywjbEntities= (List<GywjbEntity>) page.getList();
+        for (GywjbEntity e : gywjbEntities) {
+            e.setZztdm("5");
+            e.setZztmc("确认供货");
+            gywjbService.updateById(e);
+        }
+        return R.ok();
+    }
+
+    /**
      * 保存
      */
     @RequestMapping("/save")
