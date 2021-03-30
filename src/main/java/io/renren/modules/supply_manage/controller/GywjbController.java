@@ -110,7 +110,7 @@ public class GywjbController {
         PageUtils page = gywjbService.xgqueryPage(map);
         List<GywjbEntity> gywjbEntities= (List<GywjbEntity>) page.getList();
         for (GywjbEntity e : gywjbEntities) {
-            e.setZztdm("4");
+            e.setZztdm("6");
             e.setZztmc("交易完成");
             gywjbService.updateById(e);
         }
@@ -128,7 +128,7 @@ public class GywjbController {
         PageUtils page = gywjbService.xgqueryPage(map);
         List<GywjbEntity> gywjbEntities= (List<GywjbEntity>) page.getList();
         for (GywjbEntity e : gywjbEntities) {
-            e.setZztdm("5");
+            e.setZztdm("4");
             e.setZztmc("确认供货");
             gywjbService.updateById(e);
         }
@@ -255,7 +255,6 @@ public class GywjbController {
             gywjbEntity.setZtmc("已上传");
             gywjbEntity.setZztdm("0");
             gywjbEntity.setZztmc("供应商待发布");
-            gywjbEntity.setName("");
             gywjbEntity.setMaterialName("");gywjbEntity.setAddress("");gywjbEntity.setJsrq("");
             gywjbEntity.setKsri("");gywjbEntity.setMaterialNum("0");gywjbEntity.setMaterialPrice((float)0);
             gywjbEntity.setPhone("");gywjbEntity.setShfs("");
@@ -273,6 +272,71 @@ public class GywjbController {
             gywjb.setZztmc("供应商待发布");
             gywjbService.updateById(gywjb);
         }
+        return R.ok();
+    }
+
+    /**
+     * 供货单据上传
+     */
+    @RequestMapping("/ghfiles")
+    public R ghsingleFileUploads(@RequestParam Map<String, Object> params, MultipartFile file) {
+        String wjdz = ""; //文件地址
+        String filename = ""; //上传时文件名称
+        String wjmc = "";//文件名称
+        try {
+            String uploadDir = uploadPath.getPath(); //获得自定义的地址
+            filename = file.getOriginalFilename(); //得到上传时的文件名
+            //如果目录不存在，自动创建文件夹
+            File dir = new File(uploadDir);
+            if (!dir.exists()) {
+                dir.mkdir();
+            }
+            String wjlxdm = "GHDJ";
+            String wjlxmc = "供货单据";
+            Date date = new Date();
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
+            int time = Integer.parseInt(formatter.format(date)); //当前日期
+            wjmc=wjlxmc+"-"+wjlxdm+"-"+time;
+
+            //文件后缀名
+            String suffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")); //获取后缀名
+            String cswjdz = (wjmc.replaceAll("\\-", "") + suffix); //在地址后加上后缀
+            wjdz = uploadDir + cswjdz;
+
+            File serverFile = new File(uploadDir + cswjdz);
+            file.transferTo(serverFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return R.ok().put("Singlefile", wjdz).put("filename", filename);
+    }
+
+    /**
+     * 上传供货单据，上传文件保存信息
+     */
+    @RequestMapping("/ghsave")
+    public R ghsave(@RequestBody FbwjEntity fbwjEntity){
+        GywjbEntity gywjbEntity=new GywjbEntity();
+        GywjbEntity gywjbEntity1=gywjbService.getOne(new QueryWrapper<GywjbEntity>().eq("uid",fbwjEntity.getUid()).eq("wjlxdm","AQS"));
+        GywjbEntity gywjbEntity2=gywjbService.getOne(new QueryWrapper<GywjbEntity>().eq("uid",fbwjEntity.getUid()).eq("wjlxdm","GYXK"));
+        gywjbEntity.setWjlxdm("GHDJ");  //文件类型代码
+        gywjbEntity.setWjlxmc("供货单据");  //文件类型名称
+        gywjbEntity.setWjdz(fbwjEntity.getWjdz());
+        gywjbEntity.setWjmc(fbwjEntity.getWjmc());
+        gywjbEntity.setName(gywjbEntity1.getName());
+        gywjbEntity.setZtdm(1);
+        gywjbEntity.setZtmc("已上传");
+        gywjbEntity.setZztdm("5");gywjbEntity1.setZztmc("上传供货单据");gywjbEntity2.setZztmc("上传供货单据");
+        gywjbEntity.setZztmc("上传供货单据");gywjbEntity1.setZztdm("5");gywjbEntity2.setZztdm("5");
+        gywjbEntity.setMaterialName(gywjbEntity1.getMaterialName());gywjbEntity.setAddress(gywjbEntity1.getAddress());gywjbEntity.setJsrq(gywjbEntity1.getJsrq());
+        gywjbEntity.setKsri(gywjbEntity1.getKsri());gywjbEntity.setMaterialNum(gywjbEntity1.getMaterialNum());gywjbEntity.setMaterialPrice(gywjbEntity1.getMaterialPrice());
+        gywjbEntity.setPhone(gywjbEntity1.getPhone());gywjbEntity.setShfs(gywjbEntity1.getShfs());
+        gywjbEntity.setUid(fbwjEntity.getUid());
+        gywjbEntity.setIntro(gywjbEntity1.getIntro());
+        gywjbService.save(gywjbEntity);
+        gywjbService.updateById(gywjbEntity1);
+        gywjbService.updateById(gywjbEntity2);
+
         return R.ok();
     }
 

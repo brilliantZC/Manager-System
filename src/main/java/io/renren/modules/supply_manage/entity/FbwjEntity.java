@@ -10,11 +10,12 @@ public class FbwjEntity {
     private String ztmc;//文件状态名称
     private String zztdm;//总状态代码
     private String zztmc;//总状态名称
+    private Integer uid;//区分其他订单文件
 
     public FbwjEntity() {
     }
 
-    public FbwjEntity(String name,String wjlxmc, String wjlxdm, String wjmc, String wjdz, String ztdm, String ztmc, String zztdm, String zztmc) {
+    public FbwjEntity(String name,String wjlxmc, String wjlxdm, String wjmc, String wjdz, String ztdm, String ztmc, String zztdm, String zztmc,Integer uid) {
         this.name = name;
         this.wjlxmc = wjlxmc;
         this.wjlxdm = wjlxdm;
@@ -24,6 +25,15 @@ public class FbwjEntity {
         this.ztmc = ztmc;
         this.zztdm = zztdm;
         this.zztmc = zztmc;
+        this.uid = uid;
+    }
+
+    public Integer getUid() {
+        return uid;
+    }
+
+    public void setUid(Integer uid) {
+        this.uid = uid;
     }
 
     public String getName() {
@@ -110,6 +120,7 @@ public class FbwjEntity {
                 ", ztmc='" + ztmc + '\'' +
                 ", zztdm='" + zztdm + '\'' +
                 ", zztmc='" + zztmc + '\'' +
+                ", uid=" + uid +
                 '}';
     }
 }
