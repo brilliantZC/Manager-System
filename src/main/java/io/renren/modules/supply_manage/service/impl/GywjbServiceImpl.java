@@ -49,5 +49,4 @@ public class GywjbServiceImpl extends ServiceImpl<GywjbDao, GywjbEntity> impleme
         return new PageUtils(page);
     }
 
-
 }
