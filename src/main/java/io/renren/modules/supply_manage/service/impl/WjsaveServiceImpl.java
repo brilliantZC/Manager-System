@@ -26,4 +26,17 @@ public class WjsaveServiceImpl extends ServiceImpl<WjsaveDao, WjsaveEntity> impl
         return new PageUtils(page);
     }
 
+    /*
+    找到空的返回，放要存的实体
+     */
+    @Override
+    public PageUtils fbqueryPage(Map<String, Object> params) {
+        IPage<WjsaveEntity> page = this.page(
+                new Query<WjsaveEntity>().getPage(params),
+                new QueryWrapper<WjsaveEntity>()
+        );
+
+        return new PageUtils(page);
+    }
+
 }

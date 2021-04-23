@@ -16,5 +16,6 @@ import java.util.Map;
 public interface WjsaveService extends IService<WjsaveEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+    PageUtils fbqueryPage(Map<String, Object> params);
 }
 

@@ -16,6 +16,6 @@ import java.util.Map;
 public interface WjlxbService extends IService<WjlxbEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
-    PageUtils fbqueryPage(Map<String, Object> params);
+   // PageUtils fbqueryPage(Map<String, Object> params);
 }
 

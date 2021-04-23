@@ -10,8 +10,8 @@ import lombok.Data;
 /**
  *
  *
- * @author chenshun
- * @email sunlightcs@gmail.com
+ * @author brilliantZC
+ * @email 2411464044@qq.com
  * @date 2021-04-23 09:54:11
  */
 @Data
@@ -28,10 +28,6 @@ public class WjsaveEntity implements Serializable {
 	 *
 	 */
 	private String wjlx;
-	/**
-	 *
-	 */
-	private String wjdm;
 	/**
 	 *
 	 */
