@@ -67,7 +67,8 @@ public class WjlxbController {
         Date date = new Date();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
         int time = Integer.parseInt(formatter.format(date)); //当前日期
-        int num=wjsaveService.count(new QueryWrapper<WjsaveEntity>().eq("uid","%time%"));
+        int num=wjsaveService.count(new QueryWrapper<WjsaveEntity>().eq("wjlxdm","AQS"));
+        System.out.println(num);
         wjsaveEntity1.setUid(time+num+1000);
         WjsaveEntity wjsaveEntity2=new WjsaveEntity();
         wjsaveEntity2.setWjlx("供应许可");wjsaveEntity2.setWjlxdm("GYXK");wjsaveEntity2.setWjdz("");
@@ -100,7 +101,7 @@ public class WjlxbController {
      * @param params
      * @return
      */
-  /*  @RequestMapping("/ghdjlist")
+    @RequestMapping("/ghdjlist")
     public R ghdjlist(@RequestParam Map<String, Object> params){
         PageUtils page = wjlxbService.fbqueryPage(params);
         List<FbwjEntity> fbwjEntities = new ArrayList();
@@ -113,7 +114,7 @@ public class WjlxbController {
         fbwjEntity2.setZtmc("未上传");fbwjEntity2.setZztdm("0");fbwjEntity2.setZztmc("供应商发布");fbwjEntities.add(fbwjEntity2);
         page.setList(fbwjEntities);
         return R.ok().put("page", page);
-    }*/
+    }
 
 
     /**
