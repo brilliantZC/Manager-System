@@ -19,9 +19,10 @@ public class GywjbServiceImpl extends ServiceImpl<GywjbDao, GywjbEntity> impleme
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
         String key=(String) params.get("key");
+        int uid = Integer.parseInt(key);
         IPage<GywjbEntity> page = this.page(
                 new Query<GywjbEntity>().getPage(params),
-                new QueryWrapper<GywjbEntity>().eq("uid",key)
+                new QueryWrapper<GywjbEntity>().eq("uid",uid)
         );
 
         return new PageUtils(page);
