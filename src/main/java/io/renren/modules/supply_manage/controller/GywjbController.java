@@ -9,15 +9,13 @@ import java.util.*;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 
-import io.renren.modules.supply_manage.entity.FbwjEntity;
-import io.renren.modules.supply_manage.entity.GyuserEntity;
-import io.renren.modules.supply_manage.entity.UploadPath;
+import io.renren.modules.supply_manage.entity.*;
 import io.renren.modules.supply_manage.service.GyuserService;
+import io.renren.modules.supply_manage.service.WjsaveService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import io.renren.modules.supply_manage.entity.GywjbEntity;
 import io.renren.modules.supply_manage.service.GywjbService;
 import io.renren.common.utils.PageUtils;
 import io.renren.common.utils.R;
@@ -42,6 +40,8 @@ public class GywjbController {
     private GyuserService gyuserService;
     @Autowired
     private UploadPath uploadPath;
+    @Autowired
+    private WjsaveService wjsaveService;
 
     /**
      * 列表
@@ -155,8 +155,8 @@ public class GywjbController {
             gyuserService.updateById(gyuserEntity);
         }
         //更新gywjb剩余内容
-        GywjbEntity gywjbEntity1=gywjbService.getOne(new QueryWrapper<GywjbEntity>().eq("wjlxdm","AQS").eq("zztdm","0"));
-        GywjbEntity gywjbEntity2=gywjbService.getOne(new QueryWrapper<GywjbEntity>().eq("wjlxdm","GYXK").eq("zztdm","0"));
+        GywjbEntity gywjbEntity1=new GywjbEntity();
+        GywjbEntity gywjbEntity2=new GywjbEntity();
         gywjbEntity1.setName(gywjb.getName()); gywjbEntity2.setName(gywjb.getName());
         gywjbEntity1.setPhone(gywjb.getPhone());gywjbEntity2.setPhone(gywjb.getPhone());
         gywjbEntity1.setAddress(gywjb.getAddress());gywjbEntity2.setAddress(gywjb.getAddress());
@@ -169,13 +169,17 @@ public class GywjbController {
         gywjbEntity1.setIntro(gywjb.getIntro()); gywjbEntity2.setIntro(gywjb.getIntro());
         gywjbEntity1.setZztmc("供应商发布");gywjbEntity2.setZztmc("供应商发布");
         gywjbEntity1.setZztdm("1");gywjbEntity2.setZztdm("1");
-        Date date = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
-        int time = Integer.parseInt(formatter.format(date)); //当前日期
-        int num=gywjbService.count(new QueryWrapper<GywjbEntity>().eq("uid","%time%"));
-        gywjbEntity1.setUid(time+num+1);gywjbEntity2.setUid(time+num+1);
-		gywjbService.updateById(gywjbEntity1);
-        gywjbService.updateById(gywjbEntity2);
+        gywjbEntity1.setUid(gywjb.getUid());gywjbEntity2.setUid(gywjb.getUid());
+        WjsaveEntity wjsaveEntity1=wjsaveService.getOne(new QueryWrapper<WjsaveEntity>().eq("uid",gywjb.getUid()).eq("wjlxdm","AQS"));
+        WjsaveEntity wjsaveEntity2=wjsaveService.getOne(new QueryWrapper<WjsaveEntity>().eq("uid",gywjb.getUid()).eq("wjlxdm","GYXK"));
+        gywjbEntity1.setZtmc(wjsaveEntity1.getZtmc());gywjbEntity2.setZtmc(wjsaveEntity2.getZtmc());
+        gywjbEntity1.setZtdm(wjsaveEntity1.getZtdm());gywjbEntity2.setZtdm(wjsaveEntity2.getZtdm());
+        gywjbEntity1.setWjmc(wjsaveEntity1.getWjmc());gywjbEntity2.setWjmc(wjsaveEntity2.getWjmc());
+        gywjbEntity1.setWjdz(wjsaveEntity1.getWjdz());gywjbEntity2.setWjdz(wjsaveEntity2.getWjdz());
+        gywjbEntity1.setWjlxmc("安全书");gywjbEntity2.setWjlxmc("供应许可");
+        gywjbEntity1.setWjlxdm("AQS");gywjbEntity2.setWjlxdm("GYXK");
+		gywjbService.save(gywjbEntity1);
+        gywjbService.save(gywjbEntity2);
         return R.ok();
     }
 
@@ -215,16 +219,18 @@ public class GywjbController {
                 dir.mkdir();
             }
             String wjlxdm = params.get("wjlxdm").toString();
-            String wjlxmc = params.get("wjlxmc").toString();
+            String wjlx = params.get("wjlx").toString();
             Date date = new Date();
             SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
             int time = Integer.parseInt(formatter.format(date)); //当前日期
-            wjmc=wjlxmc+"-"+wjlxdm+"-"+time;
+            wjmc=wjlx+"-"+wjlxdm+"-"+time;
+
 
             //文件后缀名
             String suffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")); //获取后缀名
             String cswjdz = (wjmc.replaceAll("\\-", "") + suffix); //在地址后加上后缀
             wjdz = uploadDir + cswjdz;
+            filename = wjmc+suffix;
 
             File serverFile = new File(uploadDir + cswjdz);
             file.transferTo(serverFile);
@@ -238,37 +244,33 @@ public class GywjbController {
      * 编辑申报信息，上传文件保存信息
      */
     @RequestMapping("/bjsave")
-    public R bjsave(@RequestBody FbwjEntity fbwjEntity){
+    public R bjsave(@RequestBody WjsaveEntity wjsaveEntity){
         //查到就更新，查不到保存
-        GywjbEntity gywjb=gywjbService.getOne(new QueryWrapper<GywjbEntity>().eq("wjlxdm",fbwjEntity.getWjlxdm()).eq("ztdm",fbwjEntity.getZtdm()));
-        if(gywjb==null){
-            GywjbEntity gywjbEntity=new GywjbEntity();
-            gywjbEntity.setWjlxdm(fbwjEntity.getWjlxdm());  //文件类型代码
-            gywjbEntity.setWjlxmc(fbwjEntity.getWjlxmc());  //文件类型名称
-            gywjbEntity.setWjdz(fbwjEntity.getWjdz());
-            gywjbEntity.setWjmc(fbwjEntity.getWjmc());
-            gywjbEntity.setName(fbwjEntity.getName());
-            gywjbEntity.setZtdm(1);
-            gywjbEntity.setZtmc("已上传");
-            gywjbEntity.setZztdm("0");
-            gywjbEntity.setZztmc("供应商待发布");
-            gywjbEntity.setMaterialName("");gywjbEntity.setAddress("");gywjbEntity.setJsrq("");
-            gywjbEntity.setKsri("");gywjbEntity.setMaterialNum("0");gywjbEntity.setMaterialPrice((float)0);
-            gywjbEntity.setPhone("");gywjbEntity.setShfs("");
-            gywjbService.save(gywjbEntity);
+        WjsaveEntity wjsave=wjsaveService.getOne(new QueryWrapper<WjsaveEntity>().eq("uid",wjsaveEntity.getUid()).eq("wjlxdm",wjsaveEntity.getWjlxdm()));
+        if(wjsave==null){
+            WjsaveEntity wjsaveEntity1 = new WjsaveEntity();
+            wjsaveEntity1.setUid(wjsaveEntity.getUid());
+            wjsaveEntity1.setWjmc(wjsaveEntity.getWjmc());
+            wjsaveEntity1.setZtmc("已上传");
+            wjsaveEntity1.setZtdm(wjsaveEntity.getZtdm());
+            wjsaveEntity1.setWjlxdm(wjsaveEntity.getWjlxdm());
+            wjsaveEntity1.setWjdz(wjsaveEntity.getWjdz());
+            wjsaveEntity1.setWjlx(wjsaveEntity.getWjlx());
+            wjsaveService.save(wjsaveEntity1);
+            System.out.println(wjsaveEntity1);
         }
         else {
-            gywjb.setWjlxdm(fbwjEntity.getWjlxdm());  //文件类型代码
-            gywjb.setWjlxmc(fbwjEntity.getWjlxmc());  //文件类型名称
-            gywjb.setWjdz(fbwjEntity.getWjdz());
-            gywjb.setWjmc(fbwjEntity.getWjmc());
-            gywjb.setName(fbwjEntity.getName());
-            gywjb.setZtdm(1);
-            gywjb.setZtmc("已上传");
-            gywjb.setZztdm("0");
-            gywjb.setZztmc("供应商待发布");
-            gywjbService.updateById(gywjb);
+            wjsave.setUid(wjsaveEntity.getUid());
+            wjsave.setWjmc(wjsaveEntity.getWjmc());
+            wjsave.setZtmc("已上传");
+            wjsave.setZtdm(1);
+            wjsave.setWjlxdm(wjsaveEntity.getWjlxdm());
+            wjsave.setWjdz(wjsaveEntity.getWjdz());
+            wjsave.setWjlx(wjsaveEntity.getWjlx());
+            wjsaveService.updateById(wjsave);
+            System.out.println(wjsave);
         }
+
         return R.ok();
     }
 

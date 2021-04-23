@@ -59,18 +59,6 @@ public class WjlxbController {
      */
     @RequestMapping("/fbwjlist")
     public R fbwjlist(@RequestParam Map<String, Object> params){
-        /*PageUtils page = wjlxbService.fbqueryPage(params);
-        List<FbwjEntity> fbwjEntities = new ArrayList();
-        FbwjEntity fbwjEntity1=new FbwjEntity();
-        fbwjEntity1.setWjmc("");fbwjEntity1.setWjdz("");fbwjEntity1.setWjlxdm("AQS");fbwjEntity1.setWjlxmc("安全书");
-        fbwjEntity1.setZtdm("0");fbwjEntity1.setZtmc("未上传");fbwjEntity1.setZztdm("0");fbwjEntity1.setZztmc("供应商发布");
-        fbwjEntities.add(fbwjEntity1);
-        FbwjEntity fbwjEntity2=new FbwjEntity();
-        fbwjEntity2.setWjmc("");fbwjEntity2.setWjdz("");fbwjEntity2.setWjlxdm("GYXK");fbwjEntity2.setWjlxmc("供应许可");fbwjEntity2.setZtdm("0");
-        fbwjEntity2.setZtmc("未上传");fbwjEntity2.setZztdm("0");fbwjEntity2.setZztmc("供应商发布");fbwjEntities.add(fbwjEntity2);
-        page.setList(fbwjEntities);
-        return R.ok().put("page", page);*/
-
         PageUtils page = wjsaveService.fbqueryPage(params);
         List<WjsaveEntity> wjsaveEntities = new ArrayList();
         WjsaveEntity wjsaveEntity1=new WjsaveEntity();
@@ -80,11 +68,12 @@ public class WjlxbController {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
         int time = Integer.parseInt(formatter.format(date)); //当前日期
         int num=wjsaveService.count(new QueryWrapper<WjsaveEntity>().eq("uid","%time%"));
-        wjsaveEntity1.setUid(time+num+1);
+        wjsaveEntity1.setUid(time+num+1000);
         WjsaveEntity wjsaveEntity2=new WjsaveEntity();
         wjsaveEntity2.setWjlx("供应许可");wjsaveEntity2.setWjlxdm("GYXK");wjsaveEntity2.setWjdz("");
         wjsaveEntity2.setZtdm(0);wjsaveEntity2.setZtmc("未上传");wjsaveEntity2.setWjmc("");
-        wjsaveEntity2.setUid(time+num+1);
+        wjsaveEntity2.setUid(time+num+1000);
+        wjsaveEntities.add(wjsaveEntity1);wjsaveEntities.add(wjsaveEntity2);
         page.setList(wjsaveEntities);
         return R.ok().put("page", page);
     }
@@ -96,10 +85,12 @@ public class WjlxbController {
      */
     @RequestMapping("/scwjlist")
     public R scwjlist(@RequestParam Map<String, Object> params){
-        PageUtils page = wjlxbService.fbqueryPage(params);
-        List<GywjbEntity> scwjwc=new ArrayList();
-        scwjwc.add(gywjbService.getOne(new QueryWrapper<GywjbEntity>().eq("ztdm", 1).eq("wjlxdm", "AQS")));
-        scwjwc.add(gywjbService.getOne(new QueryWrapper<GywjbEntity>().eq("ztdm",1).eq("wjlxdm","GYXK")));
+        PageUtils page = wjsaveService.fbqueryPage(params);
+        String key =(String) params.get("key");
+        int uid = Integer.parseInt(key);
+        List<WjsaveEntity> scwjwc=new ArrayList();
+        scwjwc.add(wjsaveService.getOne(new QueryWrapper<WjsaveEntity>().eq("ztdm", 1).eq("wjlxdm", "AQS").eq("uid",uid)));
+        scwjwc.add(wjsaveService.getOne(new QueryWrapper<WjsaveEntity>().eq("ztdm",1).eq("wjlxdm","GYXK").eq("uid",uid)));
         page.setList(scwjwc);
         return R.ok().put("page", page);
     }
@@ -109,7 +100,7 @@ public class WjlxbController {
      * @param params
      * @return
      */
-    @RequestMapping("/ghdjlist")
+  /*  @RequestMapping("/ghdjlist")
     public R ghdjlist(@RequestParam Map<String, Object> params){
         PageUtils page = wjlxbService.fbqueryPage(params);
         List<FbwjEntity> fbwjEntities = new ArrayList();
@@ -122,7 +113,7 @@ public class WjlxbController {
         fbwjEntity2.setZtmc("未上传");fbwjEntity2.setZztdm("0");fbwjEntity2.setZztmc("供应商发布");fbwjEntities.add(fbwjEntity2);
         page.setList(fbwjEntities);
         return R.ok().put("page", page);
-    }
+    }*/
 
 
     /**
