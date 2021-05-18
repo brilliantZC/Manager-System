@@ -19,11 +19,7 @@ import io.renren.modules.goods_manage.service.GoodsService;
 import io.renren.common.utils.PageUtils;
 import io.renren.common.utils.R;
 
-
-
 /**
- *
- *
  * @author chenshun
  * @email sunlightcs@gmail.com
  * @date 2021-01-31 17:45:28
