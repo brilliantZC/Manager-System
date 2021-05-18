@@ -29,7 +29,6 @@ public class DayBillController {
     @Autowired
     private DayBillService dayBillService;
 
-
     /**
      * 列表
      */
@@ -107,12 +106,15 @@ public class DayBillController {
      */
     @RequestMapping("/daybilllist")
     public R daybilllist(@RequestParam Map<String, Object> params){
-        PageUtils page = dayBillService.queryPage(params);
+        //拿到所有数据
+        PageUtils page = dayBillService.queryPageday(params);
+        List<DayBillEntity> dayBillEntities= dayBillService.selectAll();
+        //一一取出日期、数量
         List zname=new ArrayList();
         List znum=new ArrayList();
-        for (int i = 1; i <= dayBillService.count(); i++) {
-            zname.add(dayBillService.getById(i).getDayBillid());
-            znum.add(dayBillService.getById(i).getDayPure());
+        for (int i = 0; i < dayBillService.count(); i++) {
+            zname.add(dayBillEntities.get(i).getDayBillid());
+            znum.add(dayBillEntities.get(i).getDayPure());
         }
         return R.ok().put("page", page).put("zname",zname).put("znum",znum);
     }
