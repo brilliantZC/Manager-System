@@ -2,8 +2,10 @@ package io.renren.modules.bill_manage.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import io.renren.common.utils.PageUtils;
+import io.renren.modules.bill_manage.entity.DayBillEntity;
 import io.renren.modules.bill_manage.entity.MonBillEntity;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -16,5 +18,6 @@ import java.util.Map;
 public interface MonBillService extends IService<MonBillEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+    List<MonBillEntity> selectAll();
 }
 

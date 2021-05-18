@@ -1,6 +1,9 @@
 package io.renren.modules.bill_manage.service.impl;
 
+import io.renren.modules.bill_manage.entity.DayBillEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -26,5 +29,10 @@ public class MonBillServiceImpl extends ServiceImpl<MonBillDao, MonBillEntity> i
 
         return new PageUtils(page);
     }
+    @Override
+    public List<MonBillEntity> selectAll() {
+        return baseMapper.selectList(new QueryWrapper<MonBillEntity>().like("mon_year",2));
+    }
+
 
 }
