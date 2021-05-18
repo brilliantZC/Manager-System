@@ -100,7 +100,7 @@ public class BillController {
             dayBillEntity1.setDayPure(dayBillEntity1.getDayIncome()-dayBillEntity1.getDayOutcome());
             dayBillEntity1.setDayYear(bill.getBillId() / 10000);
             dayBillEntity1.setDayMon(bill.getBillId() % 10000 / 100);
-            dayBillEntity1.setDayDay(bill.getBillId() % 1000000);
+            dayBillEntity1.setDayDay(bill.getBillId() % 100);
             //求星期数
             String[] weeks = {"星期一","星期二","星期三","星期四","星期五","星期六","星期日"};
             int y=dayBillEntity1.getDayYear()%100;
@@ -119,9 +119,13 @@ public class BillController {
         }
 
         //月账单处理,同理
-        QueryWrapper<MonBillEntity> monqueryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("mon_mon",bill.getBillId() % 10000 / 100).eq("mon_year",bill.getBillId() / 10000);
-        MonBillEntity monBillEntity=monBillService.getOne(monqueryWrapper);
+       // QueryWrapper<MonBillEntity> monqueryWrapper = new QueryWrapper<>();
+       // queryWrapper.eq("mon_mon",bill.getBillId() % 10000 / 100).eq("mon_year",bill.getBillId() / 10000);
+
+        MonBillEntity monBillEntity=monBillService.getOne(new QueryWrapper<MonBillEntity>().eq("mon_mon",bill.getBillId() % 10000 / 100).eq("mon_year",bill.getBillId() / 10000));
+
+        System.out.println(monBillEntity);
+
         if(monBillEntity!=null){
             if(bill.getBillInout().equals("1")){
                 monBillEntity.setMonIncome(monBillEntity.getMonIncome()+bill.getBillAccount());
