@@ -5,9 +5,7 @@ import java.util.*;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.renren.modules.supply_manage.entity.FbwjEntity;
-import io.renren.modules.supply_manage.entity.GywjbEntity;
 import io.renren.modules.supply_manage.entity.WjsaveEntity;
-import io.renren.modules.supply_manage.service.GywjbService;
 import io.renren.modules.supply_manage.service.WjsaveService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,8 +34,6 @@ import io.renren.common.utils.R;
 public class WjlxbController {
     @Autowired
     private WjlxbService wjlxbService;
-    @Autowired
-    private GywjbService gywjbService;
     @Autowired
     private WjsaveService wjsaveService;
 
