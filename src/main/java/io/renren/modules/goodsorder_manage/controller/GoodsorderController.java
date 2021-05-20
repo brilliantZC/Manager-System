@@ -1,12 +1,12 @@
 package io.renren.modules.goodsorder_manage.controller;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.renren.modules.goods_manage.entity.GoodsEntity;
 import io.renren.modules.goods_manage.service.GoodsService;
-import io.renren.modules.supply_manage.entity.GywjbEntity;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -66,11 +66,98 @@ public class GoodsorderController {
     @RequestMapping("/qrorderinfo/{id}")
     public R qrorderinfo(@PathVariable("id") Integer id){
         GoodsorderEntity goodsorder = goodsorderService.getById(id);
-        goodsorder.setZztmc("商家确认订单");
+        goodsorder.setZztmc("商家确认订单！");
         goodsorder.setZztdm(2);
         goodsorderService.updateById(goodsorder);
         return R.ok();
     }
+
+    /**
+     * 订单制作完成信息
+     */
+    @RequestMapping("/zzwcinfo/{id}")
+    public R zzwcinfo(@PathVariable("id") Integer id){
+        GoodsorderEntity goodsorder = goodsorderService.getById(id);
+        goodsorder.setZztmc("订单制作完成，等待骑手接单配送！");
+        goodsorder.setZztdm(3);
+        goodsorderService.updateById(goodsorder);
+
+        return R.ok();
+    }
+    /**
+     * 骑手接单并前往商家
+     */
+    @RequestMapping("/jdsjinfo/{id}")
+    public R jdsjinfo(@PathVariable("id") Integer id){
+        GoodsorderEntity goodsorder = goodsorderService.getById(id);
+        goodsorder.setZztmc("骑手接单，前往商家取货！");
+        goodsorder.setZztdm(4);
+        goodsorderService.updateById(goodsorder);
+
+        return R.ok();
+    }
+
+    /**
+     * 骑手取货配送
+     */
+    @RequestMapping("/chpsinfo/{id}")
+    public R chpsinfo(@PathVariable("id") Integer id){
+        GoodsorderEntity goodsorder = goodsorderService.getById(id);
+        goodsorder.setZztmc("商家出货成功！骑手配送中！");
+        goodsorder.setZztdm(5);
+        goodsorderService.updateById(goodsorder);
+
+        return R.ok();
+    }
+
+    /**
+     * 骑手取货配送
+     */
+    @RequestMapping("/ddsdinfo/{id}")
+    public R ddsdinfo(@PathVariable("id") Integer id){
+        GoodsorderEntity goodsorder = goodsorderService.getById(id);
+        goodsorder.setZztmc("骑手已送达！等待用户确认");
+        goodsorder.setZztdm(6);
+        goodsorderService.updateById(goodsorder);
+
+        return R.ok();
+    }
+
+    /**
+     * 用户确认收获并送达
+     */
+    @RequestMapping("/qrfkinfo/{id}")
+    public R qrfkinfo(@PathVariable("id") Integer id) throws ParseException {
+        GoodsorderEntity goodsorder = goodsorderService.getById(id);
+        goodsorder.setZztmc("订单完成！");
+        goodsorder.setZztdm(7);
+        System.out.println(goodsorder);
+        //将开始日期转化为Date类型
+        String time = goodsorder.getTimeStar();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = simpleDateFormat.parse(time);
+        //将Date转化为时间戳
+        long oldtime = date.getTime();
+        Date newdate = new Date();
+        long newtime = newdate.getTime();
+        //得到时间戳之差
+        long timestay = newtime - oldtime;
+        //更具时间戳得到分钟和秒数
+        int fen = (int) (timestay / 60000);
+        int miao = (int) ((timestay/1000)%60);
+        if(fen>60){
+            int hour = fen/60;
+            fen = fen%60;
+            goodsorder.setTimeStay(hour+"小时"+fen+"分钟"+miao+"秒");
+        }
+        else {
+            goodsorder.setTimeStay(fen+"分钟"+miao+"秒");
+        }
+
+        goodsorderService.updateById(goodsorder);
+        return R.ok();
+    }
+
 
     /**
      * 保存
@@ -93,7 +180,7 @@ public class GoodsorderController {
         goodsorder.setPrice(goodsEntity.getGprice());
         goodsorder.setZztdm(1);
         goodsorder.setZztmc("订单生成");
-        goodsorder.setTimeStay("商家正在接单");
+        goodsorder.setTimeStay("订单生效中...");
         Date date = new Date();
         String strDateFormat = "yyyy-MM-dd HH:mm:ss";
         SimpleDateFormat sdf = new SimpleDateFormat(strDateFormat);
