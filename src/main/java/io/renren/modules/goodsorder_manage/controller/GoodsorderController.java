@@ -1,8 +1,12 @@
 package io.renren.modules.goodsorder_manage.controller;
 
-import java.util.Arrays;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import io.renren.modules.goods_manage.entity.GoodsEntity;
+import io.renren.modules.goods_manage.service.GoodsService;
+import io.renren.modules.supply_manage.entity.GywjbEntity;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,6 +34,8 @@ import io.renren.common.utils.R;
 public class GoodsorderController {
     @Autowired
     private GoodsorderService goodsorderService;
+    @Autowired
+    private GoodsService goodsService;
 
     /**
      * 列表
@@ -55,12 +61,45 @@ public class GoodsorderController {
     }
 
     /**
+     * 确认订单信息
+     */
+    @RequestMapping("/qrorderinfo/{id}")
+    public R qrorderinfo(@PathVariable("id") Integer id){
+        GoodsorderEntity goodsorder = goodsorderService.getById(id);
+        goodsorder.setZztmc("商家确认订单");
+        goodsorder.setZztdm(2);
+        goodsorderService.updateById(goodsorder);
+        return R.ok();
+    }
+
+    /**
      * 保存
      */
     @RequestMapping("/save")
     @RequiresPermissions("goodsorder_manage:goodsorder:save")
     public R save(@RequestBody GoodsorderEntity goodsorder){
 		goodsorderService.save(goodsorder);
+
+        return R.ok();
+    }
+
+    /**
+     * 保存
+     */
+    @RequestMapping("/uordersave")
+    public R uosave(@RequestBody GoodsorderEntity goodsorder){
+
+        GoodsEntity goodsEntity = goodsService.getOne(new QueryWrapper<GoodsEntity>().eq("gname",goodsorder.getGoods()));
+        goodsorder.setPrice(goodsEntity.getGprice());
+        goodsorder.setZztdm(1);
+        goodsorder.setZztmc("订单生成");
+        goodsorder.setTimeStay("商家正在接单");
+        Date date = new Date();
+        String strDateFormat = "yyyy-MM-dd HH:mm:ss";
+        SimpleDateFormat sdf = new SimpleDateFormat(strDateFormat);
+        goodsorder.setTimeStar(sdf.format(date));
+
+        goodsorderService.save(goodsorder);
 
         return R.ok();
     }

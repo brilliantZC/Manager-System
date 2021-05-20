@@ -47,11 +47,11 @@ public class GoodsorderEntity implements Serializable {
 	/**
 	 * 订单创建时间
 	 */
-	private Integer timeStar;
+	private String timeStar;
 	/**
 	 * 订单持续时间
 	 */
-	private Integer timeStay;
+	private String timeStay;
 	/**
 	 * 总状态代码
 	 */
