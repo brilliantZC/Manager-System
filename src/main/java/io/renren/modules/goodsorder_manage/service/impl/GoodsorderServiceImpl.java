@@ -20,7 +20,17 @@ public class GoodsorderServiceImpl extends ServiceImpl<GoodsorderDao, Goodsorder
     public PageUtils queryPage(Map<String, Object> params) {
         IPage<GoodsorderEntity> page = this.page(
                 new Query<GoodsorderEntity>().getPage(params),
-                new QueryWrapper<GoodsorderEntity>()
+                new QueryWrapper<GoodsorderEntity>().ne("zztdm",-1)
+        );
+
+        return new PageUtils(page);
+    }
+
+    @Override
+    public PageUtils wxqueryPage(Map<String, Object> params) {
+        IPage<GoodsorderEntity> page = this.page(
+                new Query<GoodsorderEntity>().getPage(params),
+                new QueryWrapper<GoodsorderEntity>().eq("zztdm",-1)
         );
 
         return new PageUtils(page);

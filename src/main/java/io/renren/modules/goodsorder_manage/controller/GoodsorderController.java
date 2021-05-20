@@ -48,6 +48,54 @@ public class GoodsorderController {
         return R.ok().put("page", page);
     }
 
+    /**
+     * 无效订单列表
+     */
+    @RequestMapping("/wxlist")
+    public R wxlist(@RequestParam Map<String, Object> params){
+        PageUtils page = goodsorderService.wxqueryPage(params);
+        return R.ok().put("page", page);
+    }
+
+    /**
+     * 商家拒绝订单功能
+     */
+    @RequestMapping("/rejectorderlist")
+    public R rejectorderlist(@RequestParam Map<String, Object> params) throws ParseException {
+        String sid= (String) params.get("key");
+        int id=Integer.parseInt(sid);
+        String intro=(String) params.get("intro");
+        GoodsorderEntity goodsorderEntity = goodsorderService.getById(id);
+        goodsorderEntity.setZztdm(-1);
+        goodsorderEntity.setZztmc("商家拒绝该订单");
+        goodsorderEntity.setIntro(intro);
+
+        //将开始日期转化为Date类型
+        String time = goodsorderEntity.getTimeStar();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = simpleDateFormat.parse(time);
+        //将Date转化为时间戳
+        long oldtime = date.getTime();
+        Date newdate = new Date();
+        long newtime = newdate.getTime();
+        //得到时间戳之差
+        long timestay = newtime - oldtime;
+        //更具时间戳得到分钟和秒数
+        int fen = (int) (timestay / 60000);
+        int miao = (int) ((timestay/1000)%60);
+        if(fen>60){
+            int hour = fen/60;
+            fen = fen%60;
+            goodsorderEntity.setTimeStay(hour+"小时"+fen+"分钟"+miao+"秒");
+        }
+        else {
+            goodsorderEntity.setTimeStay(fen+"分钟"+miao+"秒");
+        }
+
+        goodsorderService.updateById(goodsorderEntity);
+        return R.ok();
+    }
+
 
     /**
      * 信息

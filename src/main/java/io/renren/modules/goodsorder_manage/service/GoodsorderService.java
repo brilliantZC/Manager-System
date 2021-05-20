@@ -16,5 +16,6 @@ import java.util.Map;
 public interface GoodsorderService extends IService<GoodsorderEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+    PageUtils wxqueryPage(Map<String, Object> params);
 }
 
