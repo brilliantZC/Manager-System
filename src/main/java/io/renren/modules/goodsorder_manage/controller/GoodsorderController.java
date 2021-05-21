@@ -196,10 +196,10 @@ public class GoodsorderController {
         if(fen>60){
             int hour = fen/60;
             fen = fen%60;
-            goodsorder.setTimeStay(hour+"小时"+fen+"分钟"+miao+"秒");
+            goodsorder.setTimeStay(hour+"小时"+fen+"分"+miao+"秒");
         }
         else {
-            goodsorder.setTimeStay(fen+"分钟"+miao+"秒");
+            goodsorder.setTimeStay(fen+"分"+miao+"秒");
         }
 
         goodsorderService.updateById(goodsorder);

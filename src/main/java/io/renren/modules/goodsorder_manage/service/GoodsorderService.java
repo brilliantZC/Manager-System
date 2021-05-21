@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import io.renren.common.utils.PageUtils;
 import io.renren.modules.goodsorder_manage.entity.GoodsorderEntity;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -17,5 +18,6 @@ public interface GoodsorderService extends IService<GoodsorderEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
     PageUtils wxqueryPage(Map<String, Object> params);
+    List<GoodsorderEntity> selectAll();
 }
 

@@ -1,6 +1,9 @@
 package io.renren.modules.goodsorder_manage.service.impl;
 
+import io.renren.modules.bill_manage.entity.DayBillEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -36,4 +39,8 @@ public class GoodsorderServiceImpl extends ServiceImpl<GoodsorderDao, Goodsorder
         return new PageUtils(page);
     }
 
+    @Override
+    public List<GoodsorderEntity> selectAll() {
+        return baseMapper.selectList(new QueryWrapper<GoodsorderEntity>().eq("zztdm",7));
+    }
 }
