@@ -21,9 +21,10 @@ public class GoodsorderServiceImpl extends ServiceImpl<GoodsorderDao, Goodsorder
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
+        String key = (String) params.get("key");
         IPage<GoodsorderEntity> page = this.page(
                 new Query<GoodsorderEntity>().getPage(params),
-                new QueryWrapper<GoodsorderEntity>().ne("zztdm",-1)
+                new QueryWrapper<GoodsorderEntity>().ne("zztdm",-1).and(i->i.like("name",key).or().like("phone",key).or().like("goods",key))
         );
 
         return new PageUtils(page);
@@ -31,9 +32,10 @@ public class GoodsorderServiceImpl extends ServiceImpl<GoodsorderDao, Goodsorder
 
     @Override
     public PageUtils wxqueryPage(Map<String, Object> params) {
+        String key = (String) params.get("key");
         IPage<GoodsorderEntity> page = this.page(
                 new Query<GoodsorderEntity>().getPage(params),
-                new QueryWrapper<GoodsorderEntity>().eq("zztdm",-1)
+                new QueryWrapper<GoodsorderEntity>().eq("zztdm",-1).and(i->i.like("name",key).or().like("phone",key).or().like("goods",key))
         );
 
         return new PageUtils(page);
