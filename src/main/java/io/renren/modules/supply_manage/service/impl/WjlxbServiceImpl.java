@@ -18,9 +18,10 @@ public class WjlxbServiceImpl extends ServiceImpl<WjlxbDao, WjlxbEntity> impleme
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
+        String key = (String) params.get("key");
         IPage<WjlxbEntity> page = this.page(
                 new Query<WjlxbEntity>().getPage(params),
-                new QueryWrapper<WjlxbEntity>()
+                new QueryWrapper<WjlxbEntity>().like("jdmc",key).or().like("wjlxdm",key).or().like("wjlxmc",key)
         );
 
         return new PageUtils(page);

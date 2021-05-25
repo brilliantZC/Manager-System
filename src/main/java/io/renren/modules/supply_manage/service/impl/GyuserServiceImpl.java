@@ -18,9 +18,10 @@ public class GyuserServiceImpl extends ServiceImpl<GyuserDao, GyuserEntity> impl
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
+        String key = (String) params.get("key");
         IPage<GyuserEntity> page = this.page(
                 new Query<GyuserEntity>().getPage(params),
-                new QueryWrapper<GyuserEntity>()
+                new QueryWrapper<GyuserEntity>().like("gyname",key).or().like("gyphone",key)
         );
 
         return new PageUtils(page);
