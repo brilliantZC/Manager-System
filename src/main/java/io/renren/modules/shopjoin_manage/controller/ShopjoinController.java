@@ -80,15 +80,16 @@ public class ShopjoinController {
         return R.ok();
     }
 
+
     /**
      * 删除
      */
     @RequestMapping("/delete")
-    @RequiresPermissions("shopjoin_manage:shopjoin:delete")
     public R delete(@RequestBody Integer[] ids){
 		shopjoinService.removeByIds(Arrays.asList(ids));
 
         return R.ok();
     }
+
 
 }

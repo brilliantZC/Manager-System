@@ -199,4 +199,14 @@ public class JoinfileController {
         return R.ok();
     }
 
+    /**
+     * 删除
+     */
+    @RequestMapping("/sqdelete")
+    public R sqdelete(@RequestBody Integer[] ids){
+        joinfileService.removeByIds(Arrays.asList(ids));
+
+        return R.ok();
+    }
+
 }
