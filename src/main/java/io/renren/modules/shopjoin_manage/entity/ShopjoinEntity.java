@@ -88,5 +88,6 @@ public class ShopjoinEntity implements Serializable {
 	 * 总状态名称
 	 */
 	private String zztmc;
+	private Integer uid;
 
 }
