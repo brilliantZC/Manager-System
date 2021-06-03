@@ -23,8 +23,6 @@ import io.renren.common.utils.R;
 
 
 /**
- *
- *
  * @author chenshun
  * @email sunlightcs@gmail.com
  * @date 2021-05-19 15:08:04

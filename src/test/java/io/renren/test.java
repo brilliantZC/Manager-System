@@ -22,7 +22,7 @@ public class test {
 
     @Test
     public void testchange() throws ParseException {
-        String time= "2020-5-27 13:57:45";
+        String time= "2021-5-11 01:00:00";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss") ;
         Date date = simpleDateFormat.parse(time);
         System.out.println(date);
