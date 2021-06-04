@@ -7,7 +7,6 @@ import java.util.*;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.renren.modules.supply_manage.entity.UploadPath;
-import io.renren.modules.supply_manage.entity.WjsaveEntity;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -48,7 +47,16 @@ public class JoinfileController {
     }
 
     /**
-     * 列表
+     * 详情文件列表
+     */
+    @RequestMapping("/detaillist")
+    public R detaillist(@RequestParam Map<String, Object> params){
+        PageUtils page = joinfileService.detailqueryPage(params);
+
+        return R.ok().put("page", page);
+    }
+    /**
+     * 申请上传列表
      */
     @RequestMapping("/sqwjlist")
     public R sqwjlist(@RequestParam Map<String, Object> params){

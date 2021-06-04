@@ -16,5 +16,6 @@ import java.util.Map;
 public interface JoinfileService extends IService<JoinfileEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+    PageUtils detailqueryPage(Map<String, Object> params);
 }
 
