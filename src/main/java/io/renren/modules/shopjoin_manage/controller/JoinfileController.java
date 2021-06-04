@@ -1,7 +1,7 @@
 package io.renren.modules.shopjoin_manage.controller;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -10,17 +10,15 @@ import io.renren.modules.supply_manage.entity.UploadPath;
 import io.renren.modules.supply_manage.entity.WjsaveEntity;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import io.renren.modules.shopjoin_manage.entity.JoinfileEntity;
 import io.renren.modules.shopjoin_manage.service.JoinfileService;
 import io.renren.common.utils.PageUtils;
 import io.renren.common.utils.R;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletResponse;
 
 
 /**
@@ -156,6 +154,51 @@ public class JoinfileController {
         return R.ok().put("page", page);
     }
     /**
+     * 文件下载
+     */
+    @RequestMapping( value = "/downloads/{wjdz}",method = RequestMethod.POST)
+    public void testDownload (@PathVariable String wjdz, HttpServletResponse response) throws UnsupportedEncodingException {
+        String xx = uploadPath.getPath(); //文件的上传地址（文件夹）C:/upload/
+        String dir =xx+wjdz; //文件目录 C:/upload/2018SB0078_SBCL_180.docx
+        File file=new File(dir);     //1.获取要下载的文件的绝对路径 C:/upload/2018SB0078_SBCL_180.docx
+        String newDname=wjdz;
+        //2.获取要下载的文件名 2018SB0078_SBCL_180.docx
+
+        FileInputStream fileIn = null;
+        try {
+            fileIn =new FileInputStream(file);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        if(file.exists()) {  //判断文件父目录是否存在
+            response.setHeader("content-type", "application/octet-stream");
+            response.setContentType("application/octet-stream");
+            response.setHeader("Content-Disposition", "attachment;filename="  + URLEncoder.encode( newDname,"UTF-8"));  //3.设置content-disposition响应头控制浏览器以下载的形式打开文件
+            byte[] buff = new byte[1024];    //5.创建数据缓冲区
+            BufferedInputStream bis = null;
+            OutputStream os = null;
+            int readTmp = 0;
+            try {
+                os = response.getOutputStream(); //6.通过response对象获取OutputStream流
+                bis = new BufferedInputStream(new FileInputStream(file));     //4.根据文件路径获取要下载的文件输入流
+                int i = bis.read(buff);         //7.将FileInputStream流写入到buffer缓冲区
+                while ((readTmp =fileIn.read(buff)) != -1){
+                    os.write(buff,0,readTmp);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    fileIn.close();
+                    os.flush();
+                    os.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+    /**
      * 信息
      */
     @RequestMapping("/info/{id}")
@@ -200,12 +243,11 @@ public class JoinfileController {
     }
 
     /**
-     * 删除
+     * 申请文件上传时 删除
      */
     @RequestMapping("/sqdelete")
-    public R sqdelete(@RequestBody Integer[] ids){
-        joinfileService.removeByIds(Arrays.asList(ids));
-
+    public R sqdelete(@RequestBody Integer id){
+        joinfileService.removeById(id);
         return R.ok();
     }
 
