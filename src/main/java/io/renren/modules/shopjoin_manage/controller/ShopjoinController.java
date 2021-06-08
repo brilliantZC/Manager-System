@@ -65,6 +65,7 @@ public class ShopjoinController {
     public R tjsqinfo(@PathVariable("id") Integer id){
         ShopjoinEntity shopjoin = shopjoinService.getById(id);
         shopjoin.setZztdm(2);shopjoin.setZztmc("加盟商已提交审核");
+        shopjoinService.updateById(shopjoin);
         return R.ok().put("shopjoin", shopjoin);
     }
 
@@ -100,12 +101,19 @@ public class ShopjoinController {
 
 
     /**
-     * 删除
+     * 删除,顺便将Joinfile表中的文件信息也删除
      */
     @RequestMapping("/delete")
     public R delete(@RequestBody Integer[] ids){
-		shopjoinService.removeByIds(Arrays.asList(ids));
 
+        for (int i: ids ) {
+            ShopjoinEntity shopjoinEntity = shopjoinService.getById(i);
+            List<JoinfileEntity> joinfileEntities = joinfileService.list(new QueryWrapper<JoinfileEntity>().eq("uid",shopjoinEntity.getUid()));
+            for (int j = 0; j < joinfileService.count(); j++) {
+                joinfileService.removeById(joinfileEntities.get(j).getId());
+            }
+        }
+        shopjoinService.removeByIds(Arrays.asList(ids));
         return R.ok();
     }
 

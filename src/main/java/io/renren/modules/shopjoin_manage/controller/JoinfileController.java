@@ -56,7 +56,7 @@ public class JoinfileController {
     @RequestMapping("/detaillist")
     public R detaillist(@RequestParam Map<String, Object> params){
         PageUtils page = joinfileService.detailqueryPage(params);
-        System.out.println(page.getList());
+
         return R.ok().put("page", page);
     }
     /**
