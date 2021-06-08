@@ -64,10 +64,39 @@ public class ShopjoinController {
     @RequestMapping("/tjsqinfo/{id}")
     public R tjsqinfo(@PathVariable("id") Integer id){
         ShopjoinEntity shopjoin = shopjoinService.getById(id);
-        shopjoin.setZztdm(2);shopjoin.setZztmc("加盟商已提交审核");
+        shopjoin.setZztdm(2);shopjoin.setZztmc("加盟商已提交审核");shopjoin.setAddressResult("");
         shopjoinService.updateById(shopjoin);
         return R.ok().put("shopjoin", shopjoin);
     }
+
+    /**
+     * 实地考察通过信息
+     */
+    @RequestMapping("/accessinfo/{id}")
+    public R accessinfo(@PathVariable("id") Integer id){
+        ShopjoinEntity shopjoin = shopjoinService.getById(id);
+        shopjoin.setZztdm(3);shopjoin.setZztmc("实地考察通过");shopjoin.setAddressResult("通过");
+        shopjoinService.updateById(shopjoin);
+        return R.ok().put("shopjoin", shopjoin);
+    }
+
+    /**
+     * 实地考察驳回信息
+     */
+    /**
+     * 列表
+     */
+    @RequestMapping("/faillist")
+    public R faillist(@RequestParam Map<String, Object> params){
+        String reslut = (String) params.get("addresult");
+        int id = Integer.parseInt((String) params.get("id"));
+        ShopjoinEntity shopjoinEntity = shopjoinService.getById(id);
+        shopjoinEntity.setAddressResult(reslut);
+        shopjoinEntity.setZztmc("加盟商已填写申请");shopjoinEntity.setZztdm(1);
+        shopjoinService.updateById(shopjoinEntity);
+        return R.ok();
+    }
+
 
 
     /**

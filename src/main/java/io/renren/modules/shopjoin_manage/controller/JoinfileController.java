@@ -144,6 +144,21 @@ public class JoinfileController {
     }
 
     /**
+     * 上传个人信贷文件保存信息，并更新joinshop表
+     */
+    @RequestMapping("/joinxdsave")
+    public R joinxdsave(@RequestBody JoinfileEntity joinFileEntity){
+
+        ShopjoinEntity shopjoinEntity = shopjoinService.getOne(new QueryWrapper<ShopjoinEntity>().eq("uid",joinFileEntity.getUid()));
+        shopjoinEntity.setGrxd(joinFileEntity.getWjdz());shopjoinEntity.setGrxdztdm(1);
+        shopjoinEntity.setZztdm(4);shopjoinEntity.setZztmc("加盟商已上传个人信贷！");
+        shopjoinService.updateById(shopjoinEntity);
+        joinfileService.save(joinFileEntity);
+
+        return R.ok();
+    }
+
+    /**
      * 上传文件成功刷新列表
      */
     @RequestMapping("/sxwjlist")
