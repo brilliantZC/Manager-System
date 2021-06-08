@@ -6,6 +6,8 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import io.renren.modules.shopjoin_manage.entity.ShopjoinEntity;
+import io.renren.modules.shopjoin_manage.service.ShopjoinService;
 import io.renren.modules.supply_manage.entity.UploadPath;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +35,8 @@ public class JoinfileController {
     @Autowired
     private JoinfileService joinfileService;
     @Autowired
+    private ShopjoinService shopjoinService;
+    @Autowired
     private UploadPath uploadPath;
 
     /**
@@ -52,7 +56,7 @@ public class JoinfileController {
     @RequestMapping("/detaillist")
     public R detaillist(@RequestParam Map<String, Object> params){
         PageUtils page = joinfileService.detailqueryPage(params);
-
+        System.out.println(page.getList());
         return R.ok().put("page", page);
     }
     /**
@@ -77,6 +81,19 @@ public class JoinfileController {
         joins.add(joinFileEntity1);
         joins.add(joinFileEntity2);
         page.setList(joins);
+        return R.ok().put("page", page);
+    }
+
+    /**
+     * 修改上传列表
+     */
+    @RequestMapping("/xgwjlist")
+    public R xgwjlist(@RequestParam Map<String, Object> params){
+
+        int fid = Integer.parseInt((String) params.get("key"));
+        ShopjoinEntity shopjoinEntity = shopjoinService.getOne(new QueryWrapper<ShopjoinEntity>().eq("id",fid));
+        params.replace("key",shopjoinEntity.getUid()+"");
+        PageUtils page = joinfileService.detailqueryPage(params);
         return R.ok().put("page", page);
     }
 

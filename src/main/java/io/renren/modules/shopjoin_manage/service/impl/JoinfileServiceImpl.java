@@ -29,6 +29,7 @@ public class JoinfileServiceImpl extends ServiceImpl<JoinfileDao, JoinfileEntity
     @Override
     public PageUtils detailqueryPage(Map<String, Object> params) {
         int uid= Integer.parseInt((String) params.get("key"));
+        System.out.println(uid);
         IPage<JoinfileEntity> page = this.page(
                 new Query<JoinfileEntity>().getPage(params),
                 new QueryWrapper<JoinfileEntity>().eq("uid",uid)
