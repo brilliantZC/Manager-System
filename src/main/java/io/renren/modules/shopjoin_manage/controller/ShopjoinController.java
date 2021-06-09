@@ -1,5 +1,6 @@
 package io.renren.modules.shopjoin_manage.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -83,9 +84,6 @@ public class ShopjoinController {
     /**
      * 实地考察驳回信息
      */
-    /**
-     * 列表
-     */
     @RequestMapping("/faillist")
     public R faillist(@RequestParam Map<String, Object> params){
         String reslut = (String) params.get("addresult");
@@ -106,6 +104,40 @@ public class ShopjoinController {
         shopjoin.setZztdm(5);shopjoin.setZztmc("加盟商提交投票审核");
         shopjoinService.updateById(shopjoin);
         return R.ok().put("shopjoin", shopjoin);
+    }
+
+    /**
+     * 总部审核信息
+     */
+    @RequestMapping("/shpassinfo/{id}")
+    public R shpassinfo(@PathVariable("id") Integer id){
+        ShopjoinEntity shopjoin = shopjoinService.getById(id);
+        shopjoin.setZztdm(7);shopjoin.setZztmc("总部审核通过，允许该加盟商申请");
+        Date date = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
+        int time = Integer.parseInt(formatter.format(date));
+        shopjoin.setFinalTime(time+"");
+        shopjoin.setFinalResult("通过");
+        shopjoinService.updateById(shopjoin);
+        return R.ok().put("shopjoin", shopjoin);
+    }
+
+    /**
+     * 总部审核不通过信息
+     */
+    @RequestMapping("/shnopasslist")
+    public R shnopasslist(@RequestParam Map<String, Object> params){
+        String reslut = (String) params.get("result");
+        int id = Integer.parseInt((String) params.get("id"));
+        Date date = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
+        int time = Integer.parseInt(formatter.format(date));
+        ShopjoinEntity shopjoinEntity = shopjoinService.getById(id);
+        shopjoinEntity.setFinalResult(reslut);
+        shopjoinEntity.setFinalTime(time+"");
+        shopjoinEntity.setZztmc("总部审核不通过，请修改申请");shopjoinEntity.setZztdm(4);
+        shopjoinService.updateById(shopjoinEntity);
+        return R.ok();
     }
 
 

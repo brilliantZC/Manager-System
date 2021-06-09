@@ -96,7 +96,7 @@ public class ShopjoinTpController {
                         shopjoinService.updateById(shopjoinEntity);
                     }
                     else {
-                        shopjoinEntity.setTpResult("投票没通过");
+                        shopjoinEntity.setTpResult("投票未通过");
                         shopjoinEntity.setZztmc("专家已投票，投票未通过");shopjoinEntity.setZztdm(4);
                         shopjoinService.updateById(shopjoinEntity);
                         //删除之前的投票信息，重新投票
@@ -149,7 +149,7 @@ public class ShopjoinTpController {
                         shopjoinEntity.setZztmc("专家已投票，投票通过");shopjoinEntity.setZztdm(6);
                         shopjoinService.updateById(shopjoinEntity);
                     } else {
-                        shopjoinEntity.setTpResult("投票没通过");
+                        shopjoinEntity.setTpResult("投票未通过");
                         shopjoinEntity.setZztmc("专家已投票，投票未通过");shopjoinEntity.setZztdm(4);
                         //删除之前的投票信息，重新投票
                         for(int i = 0; i < 3; i++){
