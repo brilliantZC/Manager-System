@@ -97,6 +97,17 @@ public class ShopjoinController {
         return R.ok();
     }
 
+    /**
+     * 实地考察通过信息
+     */
+    @RequestMapping("/tpshinfo/{id}")
+    public R tpshinfo(@PathVariable("id") Integer id){
+        ShopjoinEntity shopjoin = shopjoinService.getById(id);
+        shopjoin.setZztdm(5);shopjoin.setZztmc("加盟商提交投票审核");
+        shopjoinService.updateById(shopjoin);
+        return R.ok().put("shopjoin", shopjoin);
+    }
+
 
 
     /**

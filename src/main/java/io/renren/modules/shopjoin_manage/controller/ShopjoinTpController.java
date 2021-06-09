@@ -92,7 +92,7 @@ public class ShopjoinTpController {
                     result+=list.get(2).getResult();
                     if(result>=2){
                         shopjoinEntity.setTpResult("通过");
-                        shopjoinEntity.setZztmc("专家已投票，投票通过");shopjoinEntity.setZztdm(5);
+                        shopjoinEntity.setZztmc("专家已投票，投票通过");shopjoinEntity.setZztdm(6);
                         shopjoinService.updateById(shopjoinEntity);
                     }
                     else {
@@ -146,7 +146,7 @@ public class ShopjoinTpController {
                     result += list.get(2).getResult();
                     if (result >= 2) {
                         shopjoinEntity.setTpResult("通过");
-                        shopjoinEntity.setZztmc("专家已投票，投票通过");shopjoinEntity.setZztdm(5);
+                        shopjoinEntity.setZztmc("专家已投票，投票通过");shopjoinEntity.setZztdm(6);
                         shopjoinService.updateById(shopjoinEntity);
                     } else {
                         shopjoinEntity.setTpResult("投票没通过");
