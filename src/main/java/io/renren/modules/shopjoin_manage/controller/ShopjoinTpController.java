@@ -92,11 +92,18 @@ public class ShopjoinTpController {
                     result+=list.get(2).getResult();
                     if(result>=2){
                         shopjoinEntity.setTpResult("通过");
+                        shopjoinEntity.setZztmc("专家已投票，投票通过");shopjoinEntity.setZztdm(5);
                         shopjoinService.updateById(shopjoinEntity);
                     }
                     else {
                         shopjoinEntity.setTpResult("投票没通过");
+                        shopjoinEntity.setZztmc("专家已投票，投票未通过");shopjoinEntity.setZztdm(4);
                         shopjoinService.updateById(shopjoinEntity);
+                        //删除之前的投票信息，重新投票
+                        for(int i = 0; i < 3; i++){
+                            shopjoinTpService.removeById(list.get(i).getId());
+                        }
+
                     }
                 return R.ok();
             }
@@ -139,9 +146,15 @@ public class ShopjoinTpController {
                     result += list.get(2).getResult();
                     if (result >= 2) {
                         shopjoinEntity.setTpResult("通过");
+                        shopjoinEntity.setZztmc("专家已投票，投票通过");shopjoinEntity.setZztdm(5);
                         shopjoinService.updateById(shopjoinEntity);
                     } else {
                         shopjoinEntity.setTpResult("投票没通过");
+                        shopjoinEntity.setZztmc("专家已投票，投票未通过");shopjoinEntity.setZztdm(4);
+                        //删除之前的投票信息，重新投票
+                        for(int i = 0; i < 3; i++){
+                            shopjoinTpService.removeById(list.get(i).getId());
+                        }
                         shopjoinService.updateById(shopjoinEntity);
                     }
                 }
