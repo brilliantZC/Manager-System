@@ -136,11 +136,10 @@ public class ShopjoinController {
         shopjoinEntity.setFinalResult(reslut);
         shopjoinEntity.setFinalTime(time+"");
         shopjoinEntity.setZztmc("总部审核不通过，请修改申请");shopjoinEntity.setZztdm(4);
+        shopjoinEntity.setAddressResult("");
         shopjoinService.updateById(shopjoinEntity);
         return R.ok();
     }
-
-
 
     /**
      * 保存
@@ -148,17 +147,15 @@ public class ShopjoinController {
     @RequestMapping("/save")
     @RequiresPermissions("shopjoin_manage:shopjoin:save")
     public R save(@RequestBody ShopjoinEntity shopjoin){
-        //ShopjoinEntity(id=null, name=章超, phone=18226607243, address=安徽省广德市桃州镇万桂山南路12号, money=20万, yyxk=, yyxkztdm=null, wsxk=, wsxkztdm=null, addressResult=, grxd=, grxdztdm=null, tpResult=, finalResult=, finalTime=, zztdm=null, zztmc=, uid=20211604)
         JoinfileEntity joinfileEntity1 = joinfileService.getOne(new QueryWrapper<JoinfileEntity>().eq("wjlxdm","YYXK").eq("uid",shopjoin.getUid()));
         JoinfileEntity joinfileEntity2 = joinfileService.getOne(new QueryWrapper<JoinfileEntity>().eq("wjlxdm","WSXK").eq("uid",shopjoin.getUid()));
         shopjoin.setYyxk(joinfileEntity1.getWjdz());shopjoin.setYyxkztdm(Integer.parseInt(joinfileEntity1.getZtdm()));
         shopjoin.setWsxk(joinfileEntity2.getWjdz());shopjoin.setWsxkztdm(Integer.parseInt(joinfileEntity2.getZtdm()));
         shopjoin.setZztdm(1);shopjoin.setZztmc("加盟商已填写申请");
+        shopjoin.setAddressResult("");
         shopjoinService.save(shopjoin);
         return R.ok();
     }
-
-
 
     /**
      * 修改

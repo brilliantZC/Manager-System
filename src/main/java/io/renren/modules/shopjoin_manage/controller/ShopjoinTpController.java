@@ -84,40 +84,40 @@ public class ShopjoinTpController {
                 shopjoinTpEntity.setTime(time+"");
                 shopjoinTpService.save(shopjoinTpEntity);
                 //投完票看是否该项目已经投完
-                if(shopjoinTpService.count(new QueryWrapper<ShopjoinTpEntity>().eq("uid",shopjoinEntity.getUid()))==3){
-                    List<ShopjoinTpEntity> list = shopjoinTpService.list(new QueryWrapper<ShopjoinTpEntity>().eq("uid",shopjoinEntity.getUid()));
+                if(shopjoinTpService.count(new QueryWrapper<ShopjoinTpEntity>().eq("uid",shopjoinEntity.getUid()))==3) {
+                    List<ShopjoinTpEntity> list = shopjoinTpService.list(new QueryWrapper<ShopjoinTpEntity>().eq("uid", shopjoinEntity.getUid()));
                     int result = 0;
-                    result+=list.get(0).getResult();
-                    result+=list.get(1).getResult();
-                    result+=list.get(2).getResult();
-                    if(result>=2){
+                    result += list.get(0).getResult();
+                    result += list.get(1).getResult();
+                    result += list.get(2).getResult();
+                    if (result >= 2) {
                         shopjoinEntity.setTpResult("通过");
-                        shopjoinEntity.setZztmc("专家已投票，投票通过");shopjoinEntity.setZztdm(6);
+                        shopjoinEntity.setZztmc("专家已投票，投票通过");
+                        shopjoinEntity.setZztdm(6);
                         shopjoinService.updateById(shopjoinEntity);
-                    }
-                    else {
+                    } else {
                         shopjoinEntity.setTpResult("投票未通过");
-                        shopjoinEntity.setZztmc("专家已投票，投票未通过");shopjoinEntity.setZztdm(4);
+                        shopjoinEntity.setZztmc("专家已投票，投票未通过");
+                        shopjoinEntity.setZztdm(4);
                         shopjoinService.updateById(shopjoinEntity);
                         //删除之前的投票信息，重新投票
-                        for(int i = 0; i < 3; i++){
+                        for (int i = 0; i < 3; i++) {
                             shopjoinTpService.removeById(list.get(i).getId());
                         }
 
                     }
-                return R.ok();
-            }
-            else {
+                    return R.ok();
+                }
+            }else {
                 //重复专家投票
                 return R.error("该专家已对该申请投过票了！");
             }
-        }
         }
         return R.ok();
     }
 
     /**
-     * 专家投票通过信息
+     * 专家投票不通过信息
      */
     @RequestMapping("/nopassinfo/{id}")
     public R nopassinfo(@PathVariable("id") Integer id){
